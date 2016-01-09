@@ -35,7 +35,7 @@ $.extend($.validator.messages, {
 	postalcodeBR: "Por favor, forne&ccedil;a um CEP v&aacute;lido.",
 	dateBR: "Por favor, forne&ccedil;a uma data v&aacute;lida.",
 	cpf: "Por favor, forne&ccedil;a um CPF v&aacute;lido.",
-	cnpj: "Por favor, forne&ccedil;a um CPF v&aacute;lido.",
+	cnpj: "Por favor, forne&ccedil;a um CNPJ v&aacute;lido.",
 	telefone: "Por favor, forne&ccedil;a um telefone v&aacute;lido."
 });
 

@@ -54,7 +54,7 @@ $.extend($.validator.methods, {
 		return this.optional(element) || true;
 	},
 	cnpj: function(value, element) {
-		cnpj = jQuery.trim(cnpj);
+		cnpj = jQuery.trim(value);
 	 
 		// DEIXA APENAS OS NÚMEROS
 		cnpj = cnpj.replace('/', '');

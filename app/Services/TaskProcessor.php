@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Tasks;
 use App\Repository\TaskRepository;
 use GuzzleHttp\Client;
 
@@ -13,6 +14,14 @@ Class Teste {
     protected static $messagesLoginSuccessful = [
         'Account Overview',
         'Visão geral da conta'
+    ];
+
+    protected static $defaultOptions = [
+        'verify' => false,
+        'cookies' => true,
+        'headers' => [
+            'User-Agent' => "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)"
+        ]
     ];
 
     /**
@@ -37,8 +46,25 @@ Class Teste {
     public function __construct()
     {
         libxml_use_internal_errors(true);
-        $this->client = new Client(['cookies' => true]);
+
+        $this->client = new Client(self::$defaultOptions);
         $this->taskRepository = new TaskRepository();
+    }
+
+    public function process(Tasks $tasks)
+    {
+        $this->login();
+
+        foreach ($tasks as $task) {
+            $responseForm = $this->client->get(self::URL_FORM);
+            $page = $responseForm->getBody()->getContents();
+
+            $html = new \DOMDocument();
+            $html->strictErrorChecking = false;
+            $html->loadHtml($page);
+
+            die('pk');
+        }
     }
 
     private function updateHiddenValues($page)
@@ -59,32 +85,19 @@ Class Teste {
         }
     }
 
-    public function login()
+    private function login()
     {
-        $options['verify'] = false;
-        $options['headers'] = [
-            'User-Agent' => "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
-        ];
-
         // get login page and update hidden values
-        $response = $this->client->get(self::URL_LOGIN, $options);
+        $response = $this->client->get(self::URL_LOGIN);
         $this->updateHiddenValues($response->getBody()->getContents());
 
         // authenticate
         $resultAuthenticate = $this->authenticate();
         if (!$this->checkAuthentication($resultAuthenticate)) {
-            die('Login invalid');
+            throw new \Exception('Authentication failed');
         }
 
-        $responseForm = $this->client->get(self::URL_FORM);
-        $page = $responseForm->getBody()->getContents();
-
-        $html = new \DOMDocument();
-        $html->strictErrorChecking = false;
-        $html->loadHtml($page);
-
-        echo $page;
-        die('fom');
+        return true;
     }
 
     /**
@@ -102,6 +115,7 @@ Class Teste {
         unset($allData['PersistentCookie']);
 
         //request options
+        $options = self::$defaultOptions;
         $options['form_params'] = $allData;
         $options['allow_redirects'] = [
             'max'             => 15,
