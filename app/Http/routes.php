@@ -11,16 +11,18 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', 'IndexController@indexAction');
 
-    $teste = new \App\Services\Teste();
-    //$teste->p();
-    $teste->login();
-    die;
-
-
-    return view('welcome');
-});
+//Route::get('/', function () {
+//
+//    $teste = new \App\Services\Teste();
+//    //$teste->p();
+//    $teste->login();
+//    die;
+//
+//
+//    return view('welcome');
+//});
 
 /*
 |--------------------------------------------------------------------------
