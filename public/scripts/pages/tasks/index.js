@@ -6,71 +6,80 @@ $(document).ready(function() {
         url: 'tasks/load',
         queryParams: function(params) {
             return {
-                "limit": params.limit,
-                "offset": params.offset,
                 "sort": params.sort,
                 "order": params.order,
-                "search": params.search
+                "page": $('#table-tasks').bootstrapTable('getOptions').pageNumber
             };
         },
         sidePagination: 'server',
         toolbar: '#filter-bar',
+        pagination: true,
         showfilter: true,
         sortName: 'date',
+        pageSize: 10,
         sortOrder: 'DESC',
         search: false,
         columns: [{
             field: 'id',
-            type: 'select',
+            type: 'range',
             title: 'ID',
             visible: false,
             class: 'col-md-1',
             sortable: true
         },{
             field: 'created_at',
-            type: 'search',
             title: 'Created at',
             class: 'col-md-2',
+            visible: false,
             sortable: true
         },{
             field: 'updated_at',
             title: 'Updated at',
-            class: 'col-md-3',
+            class: 'col-md-2',
+            visible: false,
             sortable: true
         },{
             field: 'task',
             title: 'Task',
-            class: 'col-md-4',
+            class: 'col-md-2',
             sortable: true
         },{
             field: 'date',
             title: 'Task date',
-            class: 'col-md-5',
+            class: 'col-md-2',
             sortable: true
         }, {
             field: 'time',
             title: 'Time spent',
             type: 'range',
-            class: 'col-md-6',
+            class: 'col-md-1',
             sortable: true
         }, {
             field: 'description',
             title: 'Description',
-            class: 'col-md-7',
+            class: 'col-md-5',
             sortable: true
         }, {
             field: 'status',
             title: 'Status',
-            class: 'col-md-8',
+            class: 'col-md-1',
             sortable: true
         }, {
             field: 'sent_at',
             title: 'Sent at',
-            class: 'col-md-9',
+            class: 'col-md-2',
+            visible: false,
             sortable: true
         }, {
+            field: 'link',
+            title: 'Link',
+            class: 'col-md-2',
+            //visible: false,
+            sortable: false,
+            searchable: false
+        }, {
             field: 'action',
-            title: 'Ações',
+            title: 'Actions',
             class: 'col-md-1',
             align: 'center',
             searchable: false,

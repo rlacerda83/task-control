@@ -135,6 +135,18 @@
                 return true;
             }
         },
+        text: {
+            search: false,
+            rows: [
+                {id: 'lk', label: '{%msg} <input class="form-control" type="text">', i18n: {msg: 'Text'}}
+            ],
+            check: function(filterData, value) {
+                if (typeof filterData.lk !== 'undefined') {
+                    return false;
+                }
+                return true;
+            }
+        },
         search: {
             search: false,
             rows: [

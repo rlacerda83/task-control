@@ -7,8 +7,11 @@
     var serverUrl;
 
     var getTypeByValues = function(filter) {
-        console.log(filter.type);
+        if (!filter.type) {
+            return {type: 'text'};
+        }
         return {type: filter.type};
+
         var typeFloat = true, typeInt = true;
         $.each(filter.values, function(i, val) {
             if (typeInt && (parseInt(val) != val)) {
@@ -34,12 +37,14 @@
         var ret = {};
         $.each(cols, function(i, col) {
             {
-                ret[col.field] = {
-                    field: col.field,
-                    label: col.title,
-                    type: col.type,
-                    values: []
-                };
+                if (col.searchable) {
+                    ret[col.field] = {
+                        field: col.field,
+                        label: col.title,
+                        type: col.type,
+                        values: []
+                    };
+                }
             }
         });
         $.each(data, function(i, row) {

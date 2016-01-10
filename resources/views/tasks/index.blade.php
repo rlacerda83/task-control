@@ -35,15 +35,15 @@
 
                 <div class="main-box clearfix">
                     <div class="main-box-body listagem clearfix">
-                        {{--<div id="toolbar" class="btn-group">--}}
-                            {{--<a href="{{ URL::route('tasks.new') }}" class="btn btn-success">--}}
-                                {{--<i class="glyphicon glyphicon-plus"></i> New Task--}}
-                            {{--</a>--}}
-                        {{--</div>--}}
 
-                        <div id="filter-bar"></div>
+                        <div id="toolbar" class="btn-group" style="margin-top: 10px">
+                            <a href="{{ URL::route('tasks.new') }}" class="btn btn-success">
+                                <i class="glyphicon glyphicon-plus"></i> New Task
+                            </a>
+                            <div id="filter-bar"></div>
+                        </div>
+
                         <div id="no-more-tables">
-
                             <table id="table-tasks"></table>
                         </div>
                     </div>

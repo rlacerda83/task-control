@@ -18,8 +18,14 @@ Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@indexAction
 Route::get('/tasks', ['as' => 'tasks', 'uses' => 'TaskController@indexAction']);
 Route::post('/tasks/load', ['as' => 'tasks.load', 'uses' => 'TaskController@indexAction']);
 Route::get('/tasks/new', ['as' => 'tasks.new', 'uses' => 'TaskController@newAction']);
-Route::get('/tasks/edit', ['as' => 'tasks.edit', 'uses' => 'TaskController@editAction']);
-Route::get('/tasks/remove', ['as' => 'tasks.remove', 'uses' => 'TaskController@removeAction']);
+Route::get('/tasks/remove/{id}', ['as' => 'tasks.remove', 'uses' => 'TaskController@removeAction']);
+
+Route::match(array('GET', 'POST'), "/tasks/edit/{id}", array(
+    'uses' => 'TaskController@editAction',
+    'as' => 'task.edit'
+));
+
+
 
 
 //Route::get('/', function () {

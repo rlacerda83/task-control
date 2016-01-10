@@ -6,7 +6,7 @@ use App\Models\Tasks;
 use App\Repository\TaskRepository;
 use GuzzleHttp\Client;
 
-Class Teste {
+Class TaskProcessor {
     const URL_FORM = 'https://docs.google.com/a/mobly.com.br/forms/d/11CFIHRL33Pw-vMLbPubP5NUZe_eGhI-equ-EhB9HjIg/viewform';
     const URL_LOGIN = 'https://accounts.google.com/ServiceLogin';
     const URL_LOGIN_AUTH = 'https://accounts.google.com/ServiceLoginAuth';

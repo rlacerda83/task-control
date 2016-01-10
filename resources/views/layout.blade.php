@@ -57,15 +57,8 @@
     <link rel="stylesheet" type="text/css" href="scripts/table-master/bootstrap-table.css">
 
     <script src="scripts/table-filter/bootstrap-table-filter.js"></script>
-    <script src="/scripts/table-filter/ext/bs-table.js"></script>
+    <script src="scripts/table-filter/ext/bs-table.js"></script>
     <link rel="stylesheet" href="scripts/table-filter/bootstrap-table-filter.css">
-
-    {{--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.css">--}}
-    {{--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.js"></script>--}}
-
-    {{--<script src="http://wenzhixin.net.cn/p/bootstrap-table/src/extensions/filter/bootstrap-table-filter.js"></script>--}}
-    {{--<script src="http://wenzhixin.net.cn/p/bootstrap-table/docs/assets/table-filter/bootstrap-table-filter.js"></script>--}}
-    {{--<script src="http://wenzhixin.net.cn/p/bootstrap-table/docs/assets/table-filter/ext/bs-table.js"></script>--}}
 
     <script src="scripts/modalEffects.js"></script>
     <script src="scripts/modernizr.custom.js"></script>
@@ -73,8 +66,6 @@
     <script src="scripts/classie.js"></script>
     <script src="scripts/jquery.isloading.js"></script>
     <script src="scripts/bootstrap-tagsinput.min.js"></script>
-
-
 
     <script src="scripts/bootbox.min.js"></script>
 
