@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-	// Confirmação
 	$(document).on('click', 'a[data-confirm]', function(ev) {
         href = $(this).attr('href');
         bootbox.dialog({
@@ -23,7 +22,6 @@ $(document).ready(function() {
         return false;
     });
 
-    // Abrir tab atraves do link (ex: /#tabPanel)
     var urlAnchorTab = document.location.toString();
     if(urlAnchorTab.match('#')){
         $('.nav-tabs a[href=#'+urlAnchorTab.split('#')[1]+']').tab('show');
@@ -36,7 +34,7 @@ $(document).ready(function() {
 
 function block(message) {
 	$.isLoading({
-		text: (message) ? message : 'Carregando...'
+		text: (message) ? message : 'Loading...'
 	});
 }
 

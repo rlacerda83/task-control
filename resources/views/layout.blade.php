@@ -7,71 +7,65 @@
 
     <title>Task Control</title>
 
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/nanoscroller.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/jasny-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="styles/compiled/theme_styles.css">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400">
-    <link rel="stylesheet" type="text/css" href="styles/extras.css">
+    {{ Html::style('styles/bootstrap/bootstrap.min.css') }}
+    {{ Html::style('styles/libs/font-awesome.css') }}
+    {{ Html::style('styles/libs/nanoscroller.css') }}
+    {{ Html::style('styles/libs/jasny-bootstrap.css') }}
+    {{ Html::style('styles/compiled/theme_styles.css') }}
+    {{ Html::style('styles/extras.css') }}
 
-    <!-- CSS Extra -->
-    <link rel="stylesheet" type="text/css" href="styles/libs/jquery.isloading.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/datepicker.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/daterangepicker.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/bootstrap-tagsinput.css">
-    <link rel="stylesheet" type="text/css" href="styles/libs/jquery.bootstrap-touchspin.css">
+    {{ Html::style('styles/libs/jquery.isloading.css') }}
+    {{ Html::style('styles/libs/datepicker.css') }}
+    {{ Html::style('styles/libs/daterangepicker.css') }}
+    {{ Html::style('styles/libs/bootstrap-tagsinput.css') }}
+    {{ Html::style('styles/libs/jquery.bootstrap-touchspin.css') }}
 
-    <link rel="stylesheet" type="text/css" href="styles/libs/ns-default.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/libs/ns-style-growl.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/libs/ns-style-bar.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/libs/ns-style-attached.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/libs/ns-style-other.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/libs/ns-style-theme.css"/>
+    {{ Html::style('styles/libs/ns-default.css') }}
+    {{ Html::style('styles/libs/ns-style-growl.css') }}
+    {{ Html::style('styles/libs/ns-style-bar.css') }}
+    {{ Html::style('styles/libs/ns-style-attached.css') }}
+    {{ Html::style('styles/libs/ns-style-other.css') }}
+    {{ Html::style('styles/libs/ns-style-theme.css') }}
 
+    {{--<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400">--}}
 
     @yield('head-css')
 
             <!-- Global Javascript -->
-    <script src="scripts/jquery.js"></script>
-    <script src="scripts/bootstrap.js"></script>
-    <script src="scripts/jasny-bootstrap.js"></script>
-    <script src="scripts/jquery.nanoscroller.min.js"></script>
-    <script src="scripts/jquery.maskedinput.min.js"></script>
-    <script src="scripts/jquery.maskmoney.js"></script>
-    <script src="scripts/validation/jquery.validate.min.js"></script>
-    <script src="scripts/validation/localization/messages_pt_BR.js"></script>
-    <script src="scripts/validation/localization/methods_pt.js"></script>
+    {{ Html::script('scripts/jquery.js') }}
+    {{ Html::script('scripts/bootstrap.js') }}
+    {{ Html::script('scripts/jquery.nanoscroller.min.js') }}
+    {{ Html::script('scripts/jquery.maskedinput.min.js') }}
+    {{ Html::script('scripts/jquery.maskmoney.js') }}
+    {{ Html::script('scripts/validation/jquery.validate.min.js') }}
 
     <!-- JS Extras -->
-    <script src="scripts/extras.js"></script>
-    <script src="scripts/bootstrap-datepicker.js"></script>
-    <script src="scripts/moment.min.js"></script>
-    <script src="scripts/daterangepicker.js"></script>
-    <script src="scripts/locales/bootstrap-datepicker.pt-BR.js"></script>
-    <script src="scripts/jquery.bootstrap-touchspin.js"></script>
+    {{ Html::script('scripts/extras.js') }}
+    {{ Html::script('scripts/bootstrap-datepicker.js') }}
+    {{ Html::script('scripts/moment.min.js') }}
+    {{ Html::script('scripts/locales/bootstrap-datepicker.pt-BR.js') }}
+    {{ Html::script('scripts/jquery.bootstrap-touchspin.js') }}
 
     <!-- Grids -->
-    <script src="scripts/table-master/bootstrap-table.js"></script>
-    <script src="scripts/table-master/locale/bootstrap-table-pt-BR.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="scripts/table-master/bootstrap-table.css">
+    {{ Html::script('scripts/table-master/bootstrap-table.js') }}
+    {{ Html::style('scripts/table-master/bootstrap-table.css') }}
 
-    <script src="scripts/table-filter/bootstrap-table-filter.js"></script>
-    <script src="scripts/table-filter/ext/bs-table.js"></script>
-    <link rel="stylesheet" href="scripts/table-filter/bootstrap-table-filter.css">
+    {{ Html::script('scripts/table-filter/bootstrap-table-filter.js') }}
+    {{ Html::script('scripts/table-filter/ext/bs-table.js') }}
+    {{ Html::style('scripts/table-filter/bootstrap-table-filter.css') }}
 
-    <script src="scripts/modalEffects.js"></script>
-    <script src="scripts/modernizr.custom.js"></script>
-    <script src="scripts/snap.svg-min.js"></script>
-    <script src="scripts/classie.js"></script>
-    <script src="scripts/jquery.isloading.js"></script>
-    <script src="scripts/bootstrap-tagsinput.min.js"></script>
+    {{ Html::script('scripts/modalEffects.js') }}
+    {{ Html::script('scripts/modernizr.custom.js') }}
+    {{ Html::script('scripts/snap.svg-min.js') }}
+    {{ Html::script('scripts/classie.js') }}
+    {{ Html::script('scripts/jquery.isloading.js') }}
+    {{ Html::script('scripts/bootstrap-tagsinput.min.js') }}
 
-    <script src="scripts/bootbox.min.js"></script>
+    {{ Html::script('scripts/bootbox.min.js') }}
 
     <!--[if lt IE 9]>
-    <script src="scripts/html5shiv.js"></script>
-    <script src="scripts/respond.min.js"></script>
+    {{ Html::script('scripts/html5shiv.js') }}
+    {{ Html::script('scripts/respond.min.js') }}
     <![endif]-->
 
     @yield('head-script')
@@ -95,7 +89,7 @@
     </div>
 
     <!-- theme scripts -->
-    <script src="scripts/scripts.js"></script>
-    <script src="scripts/pace.min.js"></script>
+    {{ Html::script('scripts/scripts.js') }}
+    {{ Html::script('scripts/pace.min.js') }}
 </body>
 </html>

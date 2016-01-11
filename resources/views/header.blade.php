@@ -1,9 +1,7 @@
 <header class="navbar" id="header-navbar">
     <div class="container">
         <a href="{{ URL::route('dashboard') }}" id="logo" class="navbar-brand">
-            <img src="img/logo.png" alt="" class="normal-logo logo-white">
-            <img src="img/logo-black.png" alt="" class="normal-logo logo-black">
-            <img src="img/logo-small.png" alt="" class="small-logo hidden-xs hidden-sm hidden">
+            {{ Html::image('img/logo.png') }}
         </a>
         <div class="clearfix">
             <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">

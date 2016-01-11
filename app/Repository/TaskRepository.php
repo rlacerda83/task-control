@@ -23,20 +23,56 @@ class TaskRepository
      * @param Request $request
      * @return bool
      */
-    public function validateRequest(Request $request)
+    public function validateRequest(Request $request, $returnJson = true)
     {
         $rules = self::$rules;
 
-        $validator = Validator::make($request->all(), $rules);
+        $params = $request->all();
+        unset($params['task'], $params['time']);
+
+        $validator = Validator::make($params, $rules);
         if ($validator->fails()) {
+
+            if ($returnJson) {
+                return $this->convertErrorsToJson($validator);
+            }
+
             return $validator->errors()->all();
         }
+
         return true;
     }
 
+    protected function convertErrorsToJson($validator)
+    {
+        $errors = [];
+        foreach (self::$rules as $field => $value) {
+            foreach ($validator->messages()->get($field) as $message) {
+                $errors[$field] = $message;
+            }
+        }
+
+        return json_encode($errors);
+    }
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function findById($id)
     {
-        return;
+        return DB::table(self::TABLE)->where('id', $id)->first();
+    }
+
+    /**
+     * @param array $data
+     * @param $id
+     * @param string $attribute
+     * @return mixed
+     */
+    public function update(array $data, $id, $attribute="id")
+    {
+        return DB::table(self::TABLE)->where($attribute, '=', $id)->update($data);
     }
 
     /**

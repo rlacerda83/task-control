@@ -60,6 +60,13 @@ $(document).ready(function() {
             class: 'col-md-5',
             sortable: true
         }, {
+            field: 'link',
+            title: 'Link',
+            class: 'col-md-2',
+            //visible: false,
+            sortable: false,
+            searchable: false
+        }, {
             field: 'status',
             title: 'Status',
             class: 'col-md-1',
@@ -70,13 +77,6 @@ $(document).ready(function() {
             class: 'col-md-2',
             visible: false,
             sortable: true
-        }, {
-            field: 'link',
-            title: 'Link',
-            class: 'col-md-2',
-            //visible: false,
-            sortable: false,
-            searchable: false
         }, {
             field: 'action',
             title: 'Actions',

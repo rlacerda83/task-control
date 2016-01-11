@@ -3,7 +3,7 @@
 @section('title', 'Tasks')
 
 @section('head-script')
-    <script src="scripts/pages/tasks/index.js"></script>
+    {{ Html::script('scripts/pages/tasks/index.js') }}
 @stop
 
 @section('content')
@@ -21,17 +21,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                @if(Session::has('message'))
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="alert alert-{{ Session::has('success') ? 'yes' : 'no' }} fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <i class="fa fa-{{ Session::has('success') ? 'yes' : 'no' }}-circle fa-fw fa-lg"></i>
-                                {{ Session::has('message') }}
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                @include('messages')
 
                 <div class="main-box clearfix">
                     <div class="main-box-body listagem clearfix">
