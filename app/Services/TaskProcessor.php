@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Tasks;
+use App\Models\Configuration;
 use App\Repository\TaskRepository;
+use App\Repository\ConfigurationRepository;
 use GuzzleHttp\Client;
 
 Class TaskProcessor {
@@ -39,32 +41,55 @@ Class TaskProcessor {
      */
     protected $taskRepository;
 
+    /**
+     * @var Configuration
+     */
+    protected $configuration;
+
+
+    protected $password;
 
     /**
      * Teste constructor.
      */
-    public function __construct()
+    public function __construct($password = null)
     {
         libxml_use_internal_errors(true);
 
-        $this->client = new Client(self::$defaultOptions);
         $this->taskRepository = new TaskRepository();
+        $configurationRepository = new ConfigurationRepository();
+
+        $this->configuration = $configurationRepository->findFirst();
+        $this->client = new Client(self::$defaultOptions);
+        $this->password = $password;
+        $this->checkConfiguration();
     }
 
-    public function process(Tasks $tasks)
+    public function checkConfiguration()
     {
-        $this->login();
-
-        foreach ($tasks as $task) {
-            $responseForm = $this->client->get(self::URL_FORM);
-            $page = $responseForm->getBody()->getContents();
-
-            $html = new \DOMDocument();
-            $html->strictErrorChecking = false;
-            $html->loadHtml($page);
-
-            die('pk');
+        $password = $this->password ? $this->password : $this->configuration->password;
+        if (! strlen($password) || ! strlen($this->configuration->email)) {
+            return false;
         }
+
+        return true;
+    }
+
+    public function process()
+    {
+        //$this->login();
+
+        $tasks = $this->taskRepository->getPending();
+        foreach ($tasks as $task) {
+            echo $task->id . '<br>';
+            // $responseForm = $this->client->get(self::URL_FORM);
+            // $page = $responseForm->getBody()->getContents();
+
+            // $html = new \DOMDocument();
+            // $html->strictErrorChecking = false;
+            // $html->loadHtml($page);    
+        }
+        die('pk');
     }
 
     private function updateHiddenValues($page)
@@ -107,8 +132,8 @@ Class TaskProcessor {
     {
         // post login
         $data = [
-            'Email' => 'rodrigo.pereira@mobly.com.br',
-            'Passwd' => 'xxxx',
+            'Email' => $configuration->email,
+            'Passwd' => $this->password ? $this->password : $configuration->password,
         ];
 
         $allData = $this->mergeData($data);

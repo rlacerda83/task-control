@@ -24,6 +24,7 @@
 */
 
 Route::group(['middleware' => ['web']], function () {
+    //dashboard
     Route::get('/', ['as' => 'dashboard', 'uses' => 'DashboardController@indexAction']);
 
     //tasks
@@ -33,7 +34,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/tasks/edit/{id}', ['as' => 'tasks.edit', 'uses' => 'TaskController@editAction']);
     Route::post('/tasks/save', ['as' => 'tasks.save', 'uses' => 'TaskController@saveAction']);
     Route::get('/tasks/remove/{id}', ['as' => 'tasks.remove', 'uses' => 'TaskController@removeAction']);
-
+    Route::post('/tasks/process', ['as' => 'tasks.process', 'uses' => 'TaskController@processAction']);
+    
     //config
     Route::post('/configuration/save', ['as' => 'configuration.save', 'uses' => 'ConfigurationController@saveAction']);
     Route::get('/configuration', ['as' => 'configuration', 'uses' => 'ConfigurationController@showAction']);

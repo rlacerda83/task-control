@@ -30,6 +30,10 @@
                             <a href="{{ URL::route('tasks.new') }}" class="btn btn-success">
                                 <i class="glyphicon glyphicon-plus"></i> New Task
                             </a>
+
+                            <a href="javascript:;" id="btn-process-tasks" class="btn btn-success">
+                                <i class="glyphicon glyphicon-plus"></i> Process Tasks
+                            </a>
                             <div id="filter-bar"></div>
                         </div>
 

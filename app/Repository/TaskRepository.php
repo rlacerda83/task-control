@@ -28,8 +28,6 @@ class TaskRepository
         $rules = self::$rules;
 
         $params = $request->all();
-        unset($params['task'], $params['time']);
-
         $validator = Validator::make($params, $rules);
         if ($validator->fails()) {
 
@@ -89,5 +87,10 @@ class TaskRepository
         $paginator = $query->paginate($itemsPage);
         $paginator->appends(app('request')->except('page'));
         return $paginator;
+    }
+
+    public function getPending()
+    {
+        return DB::table(self::TABLE)->where('status', Tasks::STATUS_PENDING)->get();
     }
 }

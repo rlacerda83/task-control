@@ -1,4 +1,17 @@
 $(document).ready(function() {
+    $("#btn-process-tasks").click(function(){
+        $.ajax({
+            url: "tasks/process", 
+            type: 'POST',
+            beforeSend: function() {
+
+            },
+            success: function(result) {
+                console.log(result);
+            }
+        });
+    }); 
+
     var grid = $('#table-tasks').bootstrapTable({
         cache: false,
         method: 'POST',

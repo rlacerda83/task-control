@@ -6,18 +6,16 @@
     <script>
         $(document).ready(function() {
             $.fn.datepicker.defaults.format = "dd/mm/yyyy";
-            $('#date').datepicker({
-                startDate: '-3d'
-            });
+            $('#date').datepicker();
 
-            // Validação
-            $('#form_cadastro').validate({
+            $('#form').validate({
                 ignore: '',
                 rules: {
                     task: { required: true },
                     date: { required: true},
                     time: { required: true },
-                    description: { required: true }
+                    description: { required: true },
+                    status: {required: true}
                 },
                 highlight: function(element) {
                     $(element).closest('.form-group').addClass('has-error');
@@ -36,8 +34,8 @@
                 }
             });
 
-            @if (Session::has('validationErrros'))
-                $("#form_cadastro").validate().showErrors({{ Session::get('validationErrros') }});
+            @if (session('validationErros'))
+                $("#form").validate().showErrors({!! session('validationErros') !!});
             @endif
         });
     </script>
@@ -64,14 +62,14 @@
                 <div class="main-box">
                     <br>
                     <div class="main-box-body formulario clearfix">
-                        {!! Form::model($task, array('route' => array('tasks.save'))) !!}
+                        {!! Form::model($task, array('route' => array('tasks.save'), 'id' => 'form')) !!}
                             {{ Form::hidden('id', null, array(
                                 'class'=>'form-control',
                                 'id' => 'id'
                             )) }}
 
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     {{ Form::label('task', '* Task (MEBLO)') }}
                                     {{ Form::text('task', null, array(
                                         'class'=>'form-control',
@@ -82,7 +80,7 @@
 
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     {{ Form::label('date', '* Task Date') }}
                                     {{ Form::text('date', null, array(
                                         'class'=>'form-control',
@@ -93,13 +91,25 @@
 
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     {{ Form::label('time', '* Time Spent') }}
                                     {{ Form::text('time', null, array(
                                         'class'=>'form-control',
                                         'maxlength' => 2,
                                         'placeholder'=>'Time Spent in hours',
                                         'id' => 'time'
+                                    )) }}
+                                </div>
+
+                                <div class="form-group col-md-3">
+                                    {{ Form::label('status', '* Status') }}
+                                    {{ Form::select('status', array(
+                                        'pending' => 'Pending',
+                                        'processed' => 'Processed',
+                                        'error' => 'Error'
+                                    ), null, array(
+                                        'class'=>'form-control',
+                                        'id' => 'status'
                                     )) }}
                                 </div>
                             </div>

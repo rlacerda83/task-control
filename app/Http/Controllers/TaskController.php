@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Date;
 use App\Models\Tasks;
+use App\Services\TaskProcessor;
 use App\Repository\TaskRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -75,6 +76,7 @@ class TaskController extends BaseController
                 return redirect('tasks');
             }
 
+            $task->date = Date::conversion($task->date);
             return view('tasks.form', [
                 'task' => $task
             ]);
@@ -87,7 +89,8 @@ class TaskController extends BaseController
     public function saveAction(Request $request)
     {
         $params = $request->all();
-        unset($params['_token']);
+        $params['date'] = Date::conversion($params['date']);
+        unset($params['_token'], $params['q']);
 
         $routeBack = 'tasks.new';
         if (isset($params['id']) && (int) $params['id'] > 0) {
@@ -103,7 +106,10 @@ class TaskController extends BaseController
                 $request->session()->flash('message', "Invalid data, please check the following errors: ");
                 $request->session()->flash('validationErrros', $isValid);
 
-                return redirect()->route($routeBack, [$routeBack == 'tasks.edit' ? $params['id'] : '']);
+                return redirect()
+                    ->route($routeBack, [$routeBack == 'tasks.edit' ? $params['id'] : null])
+                    ->withInput()
+                    ->with('validationErros', $isValid);
             }
 
             //update
@@ -141,15 +147,51 @@ class TaskController extends BaseController
     public function newAction()
     {
         $task = new Tasks();
+        $task->status = Tasks::STATUS_PENDING;
         return view('tasks.form', [
             'task' => $task
         ]);
     }
 
 
-    public function removeAction()
+    public function removeAction(Request $request, $id)
     {
+        $task = $this->repository->findById($id);
 
+        if (!$task) {
+            $request->session()->flash('message', "Task [{$params['id']}] not found");
+            return redirect('tasks');
+        }
+
+        $taskDescription = $task->task;
+        Tasks::destroy($id);
+
+        $request->session()->flash('message', "Successfully removed task [{$taskDescription}]");
+        $request->session()->flash('success', true);
+
+        return redirect('tasks');
+    }
+
+    public function processAction()
+    {
+        try {
+            $processor = new TaskProcessor('teste');
+            $canProcess = $processor->checkConfiguration();
+
+            if ($canProcess) {
+                $processor->process();  
+                //die('processou'); 
+            }
+            
+            $message = 'nao processou';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+        }
+
+        return JsonResponse::create([
+            'success' => true,
+            'message' => $message
+        ]);
     }
 
 }

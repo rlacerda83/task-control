@@ -88,7 +88,7 @@
                         <div class="row">
                             <div class="form-group col-md-12">
                                 {{ Form::label('password', 'Password') }}
-                                {{ Form::password('password', array(
+                                {{ Form::input('password', 'password', $password, array(
                                     'class'=>'form-control',
                                     'maxlength' => 20,
                                     'placeholder'=>'Password',

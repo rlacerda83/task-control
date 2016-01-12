@@ -10,6 +10,7 @@ use App\Repository\TaskRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\View\View;
 
 class ConfigurationController extends BaseController
@@ -35,7 +36,6 @@ class ConfigurationController extends BaseController
     public function showAction(Request $request)
     {
         $configuration = $this->repository->findFirst();
-
         if (!$configuration) {
             $data = ['send_email_process' => '1'];
             $configuration = Configuration::firstOrCreate($data);
@@ -43,6 +43,7 @@ class ConfigurationController extends BaseController
 
         return view('configuration.form', [
             'configuration' => $configuration,
+            'password' => strlen($configuration->password) ? Crypt::decrypt($configuration->password) : $configuration->password,
             'checked' => $configuration->send_email_process == 1 ? true : false
         ]);
     }
@@ -50,8 +51,11 @@ class ConfigurationController extends BaseController
     public function saveAction(Request $request)
     {
         $params = $request->all();
-        unset($params['_token']);
+        unset($params['_token'], $params['q']);
 
+        if (strlen($params['password'])) {
+            $params['password'] = Crypt::encrypt($params['password']);
+        }
 
         if ($request->getMethod() == 'POST') {
 
@@ -81,23 +85,6 @@ class ConfigurationController extends BaseController
 
         $request->session()->flash('message', "Method not allowed");
         return redirect('configuration');
-    }
-
-    /**
-     * @return View
-     */
-    public function newAction()
-    {
-        $task = new Tasks();
-        return view('tasks.form', [
-            'task' => $task
-        ]);
-    }
-
-
-    public function removeAction()
-    {
-
     }
 
 }
