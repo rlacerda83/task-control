@@ -34,4 +34,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/tasks/save', ['as' => 'tasks.save', 'uses' => 'TaskController@saveAction']);
     Route::get('/tasks/remove/{id}', ['as' => 'tasks.remove', 'uses' => 'TaskController@removeAction']);
 
+    //config
+    Route::post('/configuration/save', ['as' => 'configuration.save', 'uses' => 'ConfigurationController@saveAction']);
+    Route::get('/configuration', ['as' => 'configuration', 'uses' => 'ConfigurationController@showAction']);
 });

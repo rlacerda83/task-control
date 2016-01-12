@@ -3,18 +3,25 @@
 @section('title', 'Dashboard')
 
 @section('head-script')
+
+    <script>
+        var s1 = {!! $hoursGraph !!};
+        var s2 = {!! $tasksGraph !!};
+        var ticks = {!! $labelsGraph !!};
+    </script>
+
     <script src="scripts/jquery.hideseek.js"></script>
     <script src="scripts/jquery.slimscroll.min.js"></script>
-    <script src="scripts/jquery-jvectormap-1.2.2.min.js"></script>
-    <script src="scripts/jquery-jvectormap-world-merc-en.js"></script>
-    <script src="scripts/gdp-data.js"></script>
-    <script src="scripts/flot/jquery.flot.min.js"></script>
-    <script src="scripts/flot/jquery.flot.resize.min.js"></script>
-    <script src="scripts/flot/jquery.flot.time.min.js"></script>
-    <script src="scripts/flot/jquery.flot.threshold.js"></script>
-    <script src="scripts/flot/jquery.flot.axislabels.js"></script>
+    <script type="text/javascript" src="scripts/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="scripts/jqplot/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="scripts/jqplot/jqplot.highlighter.min.js"></script>
+    <script type="text/javascript" src="scripts/jqplot/jqplot.cursor.min.js"></script>
+    <script type="text/javascript" src="scripts/jqplot/jqplot.pointLabels.min.js"></script>
+    <script type="text/javascript" src="scripts/jqplot/jqplot.categoryAxisRenderer.min.js"></script>
     <script src="scripts/jquery.sparkline.min.js"></script>
     <script src="scripts/pages/dashboard.js"></script>
+    {{ Html::style('styles/libs/jquery.jqplot.min.css') }}
+
 @stop
 
 @section('content')
@@ -72,7 +79,7 @@
             <div class="col-md-12">
                 <div class="main-box">
                     <header class="main-box-header clearfix">
-                        <h2 class="pull-left">Sales &amp; Earnings</h2>
+                        <h2 class="pull-left">Hours appointment of the last year</h2>
                     </header>
 
                     <div class="main-box-body clearfix">

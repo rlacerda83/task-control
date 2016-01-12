@@ -22,7 +22,7 @@
                     </li>
 
                     <li @if (strpos(\Route::currentRouteAction(), 'Configuration@index') !== false) class="active" @endif>
-                        <a href="">
+                        <a href="{{ URL::route('configuration') }}">
                             <i class="fa fa-home"></i>
                             <span>Configurations</span>
                         </a>
