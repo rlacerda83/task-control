@@ -1,17 +1,4 @@
 $(document).ready(function() {
-    $("#btn-process-tasks").click(function(){
-        $.ajax({
-            url: "tasks/process", 
-            type: 'POST',
-            beforeSend: function() {
-
-            },
-            success: function(result) {
-                console.log(result);
-            }
-        });
-    }); 
-
     var grid = $('#table-tasks').bootstrapTable({
         cache: false,
         method: 'POST',
@@ -132,4 +119,32 @@ function actionFormatter(value, row, index) {
             '<i class="fa fa-trash-o"></i>',
             '</a>'
     ].join('');
+}
+
+function startProcess(){
+    $.ajax({
+        url: "tasks/process",
+        type: 'POST',
+        beforeSend: function() {
+            block('Processing tasks! The page will automatically update, do not close the window.');
+        },
+        data: {
+            password: $('#process-password').val()
+        },
+        success: function(result) {
+            console.log(result);
+            if (result.success == false) {
+                unblock();
+                $("#process-msg").html(result.message);
+                $("#modal-process").modal();
+                return false;
+            }
+
+            //location.reload();
+
+            setTimeout(function(){
+                unblock();
+            }, 3000);
+        }
+    });
 }

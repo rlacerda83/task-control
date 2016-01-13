@@ -159,7 +159,7 @@ class TaskController extends BaseController
         $task = $this->repository->findById($id);
 
         if (!$task) {
-            $request->session()->flash('message', "Task [{$params['id']}] not found");
+            $request->session()->flash('message', "Task [$id] not found");
             return redirect('tasks');
         }
 
@@ -172,24 +172,20 @@ class TaskController extends BaseController
         return redirect('tasks');
     }
 
-    public function processAction()
+    public function processAction(Request $request)
     {
+        $success = false;
+        $message = '';
         try {
-            $processor = new TaskProcessor('teste');
-            $canProcess = $processor->checkConfiguration();
+            $processor = new TaskProcessor($request->get('password', null));
+            $success = $processor->process();
 
-            if ($canProcess) {
-                $processor->process();  
-                //die('processou'); 
-            }
-            
-            $message = 'nao processou';
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $message = $e->getMessage();
         }
 
         return JsonResponse::create([
-            'success' => true,
+            'success' => $success,
             'message' => $message
         ]);
     }
