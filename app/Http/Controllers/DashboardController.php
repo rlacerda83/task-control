@@ -35,7 +35,7 @@ class DashboardController extends BaseController
             $tasksGraph[] = $data->tasks;
             $labelsGraph[] = $data->split_date;
         }
-        //return View::make('registration');
+        
         return view('dashboard.index')
             ->with('hoursGraph', json_encode($hoursGraph))
             ->with('tasksGraph', json_encode($tasksGraph))

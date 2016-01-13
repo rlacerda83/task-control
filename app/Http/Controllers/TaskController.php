@@ -51,7 +51,7 @@ class TaskController extends BaseController
             $row['sent_at'] = Date::conversion($task->sent_at);
             $row['edit'] = route('tasks.edit', ['id' => $task->id]);
             $row['delete'] = route('tasks.remove', ['id' => $task->id]);
-            $row['link'] = (strlen($task->link)) ? "<a href='{$task->link}'>Click</a>" : null;
+            $row['link'] = (strlen($task->link)) ? "<a target='_blank' href='{$task->link}'>Click</a>" : null;
             $rows[] = $row;
         }
 
@@ -90,6 +90,9 @@ class TaskController extends BaseController
     {
         $params = $request->all();
         $params['date'] = Date::conversion($params['date']);
+
+        $request->replace($params);
+
         unset($params['_token'], $params['q']);
 
         $routeBack = 'tasks.new';

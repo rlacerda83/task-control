@@ -13,6 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'tasks/load',
-        'tasks/process'
+        'tasks/process',
+        '/tasks/save'
     ];
 }

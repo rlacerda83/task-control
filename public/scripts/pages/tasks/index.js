@@ -63,7 +63,7 @@ $(document).ready(function() {
             field: 'link',
             title: 'Link',
             class: 'col-md-2',
-            //visible: false,
+            visible: false,
             sortable: false,
             searchable: false
         }, {

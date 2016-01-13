@@ -18,8 +18,10 @@ Class TaskProcessor
     const URL_LOGIN = 'https://accounts.google.com/ServiceLogin';
     const URL_LOGIN_AUTH = 'https://accounts.google.com/ServiceLoginAuth';
 
-    const ERROR_PASSWORD_CONFIGURATION = 'You did not fill the password in the system settings.
-                        The password is required for authentication on Google, please enter your password:';
+    const ERROR_CODE_PASSWORD = 10;
+    const ERROR_CODE_AUTHENTICATION = 20;
+
+    const ERROR_PASSWORD_CONFIGURATION = 'You did not fill the password in the system settings.The password is required for authentication on Google, please enter your password:';
 
     /**
      * @var array
@@ -73,6 +75,9 @@ Class TaskProcessor
     protected $password;
 
 
+    protected $tasksProcesseds = [];
+
+
     /**
      * Teste constructor.
      */
@@ -96,7 +101,7 @@ Class TaskProcessor
     {
         $password = $this->password ? $this->password : $this->configuration->password;
         if (!strlen($password)) {
-            throw new \Exception(self::ERROR_PASSWORD_CONFIGURATION);
+            throw new \Exception(self::ERROR_PASSWORD_CONFIGURATION, 10);
         }
 
         return true;
@@ -109,10 +114,19 @@ Class TaskProcessor
 
         $this->login();
 
-        $tasks = $this->taskRepository->getPending();
+        $tasks = Tasks::where('status', '<>', Tasks::STATUS_PROCESSED)->get();
         foreach ($tasks as $task) {
-            $this->processTask($task);
+            try {
+                $this->processTask($task);
+                $this->tasksProcesseds[] = $task;
+            } catch (Exception $e) {
+                $task->status = 'ERROR';
+                $task->error_message = $e->getMessage();
+                $this->updateTask($task, false);
+            }
         }
+
+        Log::info('Finish process');
 
         return true;
     }
@@ -146,23 +160,8 @@ Class TaskProcessor
         $responsePostForm = $this->client->post($urlPost, $options)->getBody()->getContents();
         $link = $this->getLinkFromResponseForm($responsePostForm);
 
-        if (!$link) {
-            $updateData = [
-                'status' => Tasks::STATUS_ERROR,
-                'error_message' => 'Cant save form',
-            ];
-            $this->updateTask($task, $updateData);
-            Log::error("Link not found to task [{$task->id}]");
-            return true;
-        }
-
-        $updateData = [
-            'status' => Tasks::STATUS_PROCESSED,
-            'sent_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'link' => $link
-        ];
-
-        $this->updateTask($task, $updateData);
+        $this->updateTask($task, $link);
+        
         Log::info("Task [{$task->id}] finish successfully");
         return true;
     }
@@ -173,7 +172,6 @@ Class TaskProcessor
      */
     protected function getLinkFromResponseForm($responsePostForm)
     {
-
         $html = new \DOMDocument();
         $html->strictErrorChecking = false;
         $html->loadHtml($responsePostForm);
@@ -193,9 +191,22 @@ Class TaskProcessor
         return false;
     }
 
-    private function updateTask(Tasks $task, $data)
+    private function updateTask(Tasks $task, $link)
     {
-        $this->taskRepository->update($data, $task->id);
+        if (!$link) {
+            $task->status = Tasks::STATUS_ERROR;
+            $task->error_message = 'Cant save form';
+            $task->save();
+
+            Log::error("Link not found to task [{$task->id}]");
+            return true;
+        }
+
+        $task->status = Tasks::STATUS_PROCESSED;
+        $task->sent_at = Carbon::now()->format('Y-m-d H:i:s');
+        $task->link = $link;
+        $task->save();
+
         return true;
     }
 
@@ -292,5 +303,10 @@ Class TaskProcessor
         }
 
         return $data;
+    }
+
+    public function getTasksProcessed()
+    {
+        return $this->tasksProcesseds;
     }
 }
