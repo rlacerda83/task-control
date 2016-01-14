@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\Date;
 use App\Models\Configuration;
-use App\Models\Tasks;
 use App\Repository\ConfigurationRepository;
-use App\Repository\TaskRepository;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Crypt;
@@ -38,13 +34,14 @@ class ConfigurationController extends BaseController
         $configuration = $this->repository->findFirst();
         if (!$configuration) {
             $data = ['send_email_process' => '1'];
+            $data['url_form'] = Configuration::URL_FORM;
             $configuration = Configuration::firstOrCreate($data);
         }
 
         return view('configuration.form', [
             'configuration' => $configuration,
             'password' => strlen($configuration->password) ? Crypt::decrypt($configuration->password) : $configuration->password,
-            'checked' => $configuration->send_email_process == 1 ? true : false
+            'choices' => Configuration::$selectChoices
         ]);
     }
 
@@ -80,7 +77,6 @@ class ConfigurationController extends BaseController
             $request->session()->flash('message', "Configuration updated successfully!");
             $request->session()->flash('success', true);
             return redirect('configuration');
-
         }
 
         $request->session()->flash('message', "Method not allowed");

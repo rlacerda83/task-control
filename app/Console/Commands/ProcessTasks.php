@@ -23,7 +23,11 @@ class ProcessTasks extends Command
      */
     protected $description = 'Processes all pending tasks';
 
+    protected $bar;
 
+    /**
+     * @var array
+     */
     protected $tasksProcesseds = [];
 
     /**
@@ -34,13 +38,20 @@ class ProcessTasks extends Command
     public function handle()
     {
         $success = false;
-        $password = $this->secret('Enter your password. By default the password is loaded on the configuration.');
-        
+        $password = $this->secret('Enter your password:');
+
+        $this->bar = $this->output->createProgressBar();
+        $this->bar->setFormat('debug');
+
         try {
             $this->process($password);
+
+            $this->bar->finish();
+            $this->info(' '. "\n");
             $this->info('Successfully processed tasks.');
             $this->writeTableOutput();
         } catch (\Exception $e) {
+            $this->info(' '. "\n");
             $this->error($e->getMessage());
             $success = false;
         }
@@ -59,7 +70,7 @@ class ProcessTasks extends Command
     private function process($password)
     {
         $processor = new TaskProcessor($password);
-        $result = $processor->process();
+        $result = $processor->process($this->bar);
 
         if ($result) {
             $tasksProcesseds = $processor->getTasksProcessed();

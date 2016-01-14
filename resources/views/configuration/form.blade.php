@@ -8,7 +8,8 @@
             $('#form').validate({
                 ignore: '',
                 rules: {
-                    email: { required: true, email: true  }
+                    email: { required: true, email: true  },
+                    url_form: { required: true, url: true }
                 },
                 highlight: function(element) {
                     $(element).closest('.form-group').addClass('has-error');
@@ -62,6 +63,19 @@
 
                         <div class="row">
                             <div class="form-group col-md-12">
+                                {{ Form::label('url_form', '*URL google form') }}
+                                {{ Form::text('url_form', null, array(
+                                    'class'=>'form-control',
+                                    'maxlength' => 150,
+                                    'placeholder'=>'URL google form',
+                                    'id' => 'url_form',
+                                )) }}
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-12">
                                 {{ Form::label('name', 'Name') }}
                                 {{ Form::text('name', null, array(
                                     'class'=>'form-control',
@@ -74,7 +88,7 @@
 
                         <div class="row">
                             <div class="form-group col-md-12">
-                                {{ Form::label('email', 'E-mail ') }}
+                                {{ Form::label('email', '*E-mail ') }}
                                 {{ Form::text('email', null, array(
                                     'class'=>'form-control',
                                     'maxlength' => 150,
@@ -98,11 +112,19 @@
                         </div>
 
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 {{ Form::label('send_email_process', 'Send confirmation email when process') }}
-                                {{ Form::checkbox('send_email_process', $checked, array(
+                                {{ Form::select('send_email_process', $choices, null, array(
                                     'class'=>'form-control',
                                     'id' => 'send_email_process'
+                                )) }}
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                {{ Form::label('enable_queue_process', 'Enable process tasks by queue (you need supervisor or cron)') }}
+                                {{ Form::select('enable_queue_process', $choices, null, array(
+                                    'class'=>'form-control',
+                                    'id' => 'enable_queue_process'
                                 )) }}
                             </div>
                         </div>

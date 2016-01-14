@@ -10,10 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class TaskController extends BaseController
 {
@@ -124,8 +121,10 @@ class TaskController extends BaseController
                     return redirect('tasks');
                 }
 
+                $task = Tasks::findOrNew($params['id']);
+                $task->fill($params);
+                $task->update();
 
-                $this->repository->update($params, $params['id']);
                 $request->session()->flash('message', "Task [{$task->task}] updated successfully!");
                 $request->session()->flash('success', true);
                 return redirect('tasks');
@@ -179,17 +178,20 @@ class TaskController extends BaseController
     {
         $success = false;
         $message = '';
+        $code = null;
         try {
             $processor = new TaskProcessor($request->get('password', null));
             $success = $processor->process();
 
         } catch (\Exception $e) {
             $message = $e->getMessage();
+            $code = $e->getCode();
         }
 
         return JsonResponse::create([
             'success' => $success,
-            'message' => $message
+            'message' => $message,
+            'code' => $code
         ]);
     }
 

@@ -13,15 +13,19 @@ use Log;
 
 Class TaskProcessor
 {
-
-    const URL_FORM = 'https://docs.google.com/a/mobly.com.br/forms/d/11CFIHRL33Pw-vMLbPubP5NUZe_eGhI-equ-EhB9HjIg/viewform';
     const URL_LOGIN = 'https://accounts.google.com/ServiceLogin';
     const URL_LOGIN_AUTH = 'https://accounts.google.com/ServiceLoginAuth';
 
     const ERROR_CODE_PASSWORD = 10;
     const ERROR_CODE_AUTHENTICATION = 20;
+    const ERROR_CODE_URL_FORM = 30;
+    const ERROR_CODE_EMAIL = 40;
 
     const ERROR_PASSWORD_CONFIGURATION = 'You did not fill the password in the system settings.The password is required for authentication on Google, please enter your password:';
+
+    const ERROR_URL_FORM_CONFIGURATION = 'You did not fill the google forms URL in the system settings. Please enter the information in the configuration menu';
+
+    const ERROR_EMAIL_CONFIGURATION = 'You did not fill the email in the system settings. Please enter the information in the configuration menu';
 
     /**
      * @var array
@@ -75,6 +79,9 @@ Class TaskProcessor
     protected $password;
 
 
+    /**
+     * @var array
+     */
     protected $tasksProcesseds = [];
 
 
@@ -97,33 +104,55 @@ Class TaskProcessor
         $this->client = new Client($options);
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function checkConfiguration()
     {
+        if (!strlen($this->configuration->email)) {
+            throw new \Exception(self::ERROR_URL_FORM_CONFIGURATION, 40);
+        }
+
         $password = $this->password ? $this->password : $this->configuration->password;
         if (!strlen($password)) {
             throw new \Exception(self::ERROR_PASSWORD_CONFIGURATION, 10);
         }
 
+        if (!strlen($this->configuration->url_form)) {
+            throw new \Exception(self::ERROR_URL_FORM_CONFIGURATION, 30);
+        }
+
         return true;
     }
 
-    public function process()
+    /**
+     * @param null $bar
+     * @return bool
+     */
+    public function process($bar = null)
     {
-
         Log::info('Start process');
 
-        $this->login();
+        $tasks = $this->taskRepository->getPending();
 
-        $tasks = Tasks::where('status', '<>', Tasks::STATUS_PROCESSED)->get();
+        if ($bar !== null) {
+            $bar->start($tasks->count() + 1);
+        }
+
+        $this->login();
+        $bar->advance();
+
         foreach ($tasks as $task) {
             try {
                 $this->processTask($task);
                 $this->tasksProcesseds[] = $task;
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $task->status = 'ERROR';
                 $task->error_message = $e->getMessage();
-                $this->updateTask($task, false);
+                $task->save();
             }
+            $bar->advance();
         }
 
         Log::info('Finish process');
@@ -131,12 +160,15 @@ Class TaskProcessor
         return true;
     }
 
-
+    /**
+     * @param Tasks $task
+     * @return bool
+     */
     private function processTask(Tasks $task)
     {
         Log::info("Start task [{$task->id}]");
 
-        $urlGet = $task->link ? $task->link : self::URL_FORM;
+        $urlGet = $task->link ? $task->link : $this->configuration->url_form;
         $urlPost = str_replace('viewform', 'formResponse', $urlGet);
 
         $data = [
@@ -144,13 +176,14 @@ Class TaskProcessor
             'entry.789822953' => $task->date,
             'entry.368040154' => $task->time,
             'entry_1252005894' => $task->description,
-            'emailReceipt' => $this->configuration->send_email_process ? true : false
+            'emailReceipt' => $this->configuration->send_email_process ? 'true' : ''
         ];
 
         $responseGetForm = $this->client->get($urlGet);
 
         $this->updateHiddenValues($responseGetForm->getBody()->getContents());
         $allData = $this->mergeData($data);
+
 
         //request options
         $options = self::$defaultOptions;
@@ -163,6 +196,28 @@ Class TaskProcessor
         $this->updateTask($task, $link);
         
         Log::info("Task [{$task->id}] finish successfully");
+        return true;
+    }
+
+    /**
+     * @param Tasks $task
+     * @return bool
+     * @throws \Exception
+     */
+    public function processOneTask(Tasks $task)
+    {
+        Log::info("Start one task process [{$task->id}]");
+
+        if ($task->status == Tasks::STATUS_PROCESSED) {
+            Log::info("Task [{$task->id}] is already processed");
+            return true;
+        }
+
+        $this->login();
+        $this->processTask($task);
+
+        Log::info('Finish one task process');
+
         return true;
     }
 
@@ -191,6 +246,11 @@ Class TaskProcessor
         return false;
     }
 
+    /**
+     * @param Tasks $task
+     * @param $link
+     * @return bool
+     */
     private function updateTask(Tasks $task, $link)
     {
         if (!$link) {
@@ -210,6 +270,9 @@ Class TaskProcessor
         return true;
     }
 
+    /**
+     * @param $page
+     */
     private function updateHiddenValues($page)
     {
         $html = new \DOMDocument();
@@ -228,6 +291,10 @@ Class TaskProcessor
         }
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     private function login()
     {
         Log::info('Start login');
@@ -240,7 +307,7 @@ Class TaskProcessor
         $resultAuthenticate = $this->authenticate();
         if (!$this->checkAuthentication($resultAuthenticate)) {
             Log::error('Authentication failed, check your credentials.');
-            throw new \Exception('Authentication failed, check your credentials.');
+            throw new \Exception('Authentication failed, check your credentials.', 20);
         }
 
         Log::info('Logged in successfully');

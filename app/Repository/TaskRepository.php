@@ -91,6 +91,7 @@ class TaskRepository
 
     public function getPending()
     {
-        return DB::table(self::TABLE)->where('status', Tasks::STATUS_PENDING)->get();
+        return Tasks::where('status', '<>', Tasks::STATUS_PROCESSED)->get();
     }
+
 }

@@ -12,7 +12,8 @@ class ConfigurationRepository
     const TABLE = 'configuration';
 
     public static $rules = [
-        'email' => 'required|email'
+        'email' => 'required|email',
+        'url_form' => 'required|url',
     ];
 
     /**
@@ -64,6 +65,12 @@ class ConfigurationRepository
     public function findFirst()
     {
         return DB::table(self::TABLE)->orderBy('id')->first();
+    }
+
+    public function getValue($value)
+    {
+        $configuration = $this->findFirst();
+        return isset($configuration->$value) ? $configuration->$value : null;
     }
 
     /**

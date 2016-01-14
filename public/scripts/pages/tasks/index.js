@@ -63,7 +63,7 @@ $(document).ready(function() {
             field: 'link',
             title: 'Link',
             class: 'col-md-2',
-            visible: false,
+            visible: true,
             sortable: false,
             searchable: false
         }, {
@@ -126,21 +126,27 @@ function startProcess(){
         url: "tasks/process",
         type: 'POST',
         beforeSend: function() {
+            $('#process-password').show();
+            $('#btn-ps').show();
             block('Processing tasks! The page will automatically update, do not close the window.');
         },
         data: {
             password: $('#process-password').val()
         },
         success: function(result) {
-            console.log(result);
             if (result.success == false) {
+                if(result.code != 10 && result.code != 20) {
+                    $('#process-password').hide();
+                    $('#btn-ps').hide();
+                }
+
                 unblock();
                 $("#process-msg").html(result.message);
                 $("#modal-process").modal();
                 return false;
             }
 
-            //location.reload();
+            location.reload();
 
             setTimeout(function(){
                 unblock();

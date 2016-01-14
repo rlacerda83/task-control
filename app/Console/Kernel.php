@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\Inspire::class,
-         Commands\ProcessTasks::class
+        Commands\ProcessTasks::class,
+        Commands\SetupApplication::class
     ];
 
     /**
@@ -25,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
+        // Run once a minute
+        $schedule->command('queue:work')->everyFiveMinutes();
     }
 }
