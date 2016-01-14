@@ -3,4 +3,5 @@
 /node_modules
 Homestead.yaml
 Homestead.json
+task_control.conf
 .env

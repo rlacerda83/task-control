@@ -21,6 +21,22 @@ class SetupApplication extends Command
      */
     protected $description = 'Setup application';
 
+    protected $phpPath;
+
+    protected $baseDir;
+
+    protected $userName;
+
+    protected $bar;
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->phpPath = exec('which php');
+        $this->baseDir = str_replace('/app', '', app_path());
+        $this->userName = exec('whoami');
+    }
 
     /**
      * Execute the console command.
@@ -33,41 +49,38 @@ class SetupApplication extends Command
             DB::beginTransaction();
             $this->info('Setting up database migrations...');
 
-            $bar = $this->output->createProgressBar(100);
-            $bar->setFormat('debug');
+            $this->bar = $this->output->createProgressBar(10);
+            $this->bar->setFormat('debug');
 
-            $this->createDatabse();
-            $bar->advance();
+            $this->info('Creating databse...');
+            $this->createDatabase();
+            $this->advanceBar();
 
+            $this->info('Installing migrations...');
             //$this->call('migrate:install');
-            $bar->advance();
+            $this->advanceBar();
 
+            $this->info('Running migrations...');
             $this->call('migrate');
-            $bar->advance();
+            $this->advanceBar();
 
-            $this->info(' '. "\n");
+            $this->info('Running composer...');
             //shell_exec('composer install');
-            $bar->advance();
-            $this->info(' '. "\n");
+            $this->advanceBar();
 
+            $this->info('Generating supervisor configuration file...');
+            $this->setupSupervisord();
+            $this->advanceBar();
 
-            if ($this->confirm('Do you wish run the queue with supervisord?')) {
-                $this->info('Installing supervisor...');
-                $this->setupSupervisord();
+            if ($this->confirm('Do you wish run the queue with cron?')) {
+                $this->setupCronTab();
+                $this->advanceBar();
             }
-            $bar->advance();
 
-//            $this->info(' '. "\n");
-//            if ($this->confirm('Do you wish run the queue with cron?')) {
-//                $this->info('Setup cron...');
-//            }
-//            $bar->advance();
 
-            //shell_exec('mv .env.example  .env.');
-            //$bar->advance();
-
-            $bar->finish();
+            $this->bar->finish();
             $this->info(' '. "\n");
+            $this->info('Done...');
             DB::commit();
         } catch (\Exception $e) {
             $this->info(' '. "\n");
@@ -76,7 +89,7 @@ class SetupApplication extends Command
         }
     }
 
-    private function createDatabse()
+    private function createDatabase()
     {
         DB::statement(
             'CREATE DATABASE IF NOT EXISTS ' . env('DB_DATABASE', 'task_control')
@@ -85,37 +98,36 @@ class SetupApplication extends Command
 
     private function setupSupervisord()
     {
-        exec('sudo apt-get install -y supervisor || (echo "Error Installing supervisord"; exit 1;)');
-        exec('sudo rm -f /etc/supervisor/conf.d/task_control.conf');
-        exec('sudo touch /etc/supervisor/conf.d/task_control.conf');
-
-        $phpPath = exec('which php');
-        $baseDir = str_replace('/app', '', app_path());
-        $username = exec('whoami');
+        exec("rm -f {$this->baseDir}/task_control.conf");
+        exec("touch {$this->baseDir}/task_control.conf");      
 
         $config = "
 [program:task-control-queue-listen]
-command={$phpPath} {$baseDir}/artisan queue:listen --sleep=3 --tries=3
-user={$username}
+command={$this->phpPath} {$this->baseDir}/artisan queue:listen --sleep=3 --tries=3
+user={$this->userName}
 process_name=%(program_name)s_%(process_num)d
-directory={$baseDir}
-stdout_logfile={$baseDir}/storage/logs/supervisor.log
+directory={$this->baseDir}
+stdout_logfile={$this->baseDir}/storage/logs/supervisor.log
 redirect_stderr=true
 autostart=true
 autorestart=true
 startretries=3
 numprocs=2";
 
-        //$this->info($config);
-
-
-        exec("sudo sh -c 'echo \"$config\" >> /etc/supervisor/conf.d/task_control.conf'");
-        exec('sudo service supervisor restart');
-
+        exec("sh -c 'echo \"$config\" >> {$this->baseDir}/task_control.conf'");
     }
 
     private function setupCronTab()
     {
+        $this->info('Creating cron...');
+        $line = "* * * * * {$this->phpPath} {$this->baseDir}/artisan schedule:run 1>> /dev/null 2>&1";
+        $this->info($line);
+        exec('echo crontab -l | { cat; echo "'.$line.'"; } | crontab -');
+    }
 
+    private function advanceBar()
+    {
+        $this->bar->advance();
+        $this->info(' '. "\n");
     }
 }
