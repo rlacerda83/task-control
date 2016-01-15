@@ -16,22 +16,15 @@
 
                     <li @if (strpos(\Route::currentRouteAction(), 'TaskController') !== false) class="active" @endif>
                         <a href="{{ URL::route('tasks') }}">
-                            <i class="fa fa-money"></i>
+                            <i class="fa fa-tasks"></i>
                             <span>Tasks</span>
                         </a>
                     </li>
 
                     <li @if (strpos(\Route::currentRouteAction(), 'Configuration@index') !== false) class="active" @endif>
                         <a href="{{ URL::route('configuration') }}">
-                            <i class="fa fa-home"></i>
+                            <i class="fa fa-gears"></i>
                             <span>Configurations</span>
-                        </a>
-                    </li>
-
-                    <li @if (strpos(\Route::currentRouteAction(), 'Reports@index') !== false) class="active" @endif>
-                        <a href="">
-                            <i class="fa fa-user"></i>
-                            <span>Reports</span>
                         </a>
                     </li>
                 </ul>

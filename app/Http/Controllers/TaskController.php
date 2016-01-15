@@ -37,7 +37,7 @@ class TaskController extends BaseController
             return view('tasks.index');
         }
 
-        $tasks = $this->repository->getAllPaginate($request);
+        $tasks = $this->repository->getAllPaginate($request, 10);
 
         $rows = [];
         foreach ($tasks as $task) {
@@ -92,9 +92,12 @@ class TaskController extends BaseController
 
         unset($params['_token'], $params['q']);
 
-        $routeBack = 'tasks.new';
-        if (isset($params['id']) && (int) $params['id'] > 0) {
-            $routeBack = 'tasks.edit';
+        $routeBack = $request->get('redirect', false);
+        if (!$routeBack) {
+            $routeBack = 'tasks.new';
+            if (isset($params['id']) && (int) $params['id'] > 0) {
+                $routeBack = 'tasks.edit';
+            }
         }
 
         if ($request->getMethod() == 'POST') {

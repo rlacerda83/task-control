@@ -1,0 +1,1 @@
+* * * * * #php_path #base_dir/artisan schedule:run 1>> /dev/null 2>&1

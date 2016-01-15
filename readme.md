@@ -1,27 +1,41 @@
-## Laravel PHP Framework
+# Mobly - Tasks Manager
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Description
+Manages and automatically sends the tasks to Google!
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+## Current Features
+- Interface web
+- Task Manager (insert, edit and remove)
+- Send tasks manually
+- Send tasks automatically using cron
+- Send tasks automatically using supervisord
+- Send tasks using cli commands
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## Upcoming Features
+- Implement cache
+- Send tasks using parallel requests
 
-## Official Documentation
+## Setup
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+#### Installation
+
+- Clone the repository
+- Rename the .env.example file to .env and edit the file by putting your settings
+- Go to the project folder and run in the terminal: `php artisan install`
+- Configure the web server. If you use nginx copying the contents of the nginx file in the project root.
+
+#### Task process configuration
+To synchronize automatically tasks you need to enable automatic synchronization in the settings menu.
+
+Tasks can be synchronized in the following ways:
+- Manually in the Tasks menu
+- Automatically using cron. To use this option simply copy the contents of the cron file in the project root and create a cron entry on your machine.
+- Automatically using supervisor. To use this option to copy the contents of the file supervisor in the project root and add the configuration to your supervisor.
+- Manually running on the terminal: `php artisan queue-listen` or `php artisan queue-work`. This option only works if automatic synchronization is enabled
+- Manually running `php artisan tasks:process`
 
 ## Contributing
+Contributions are welcome and will be fully credited. Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+### Security
+If you discover any security related issues, please email r.lacerda83@gmail.com instead of using the issue tracker.

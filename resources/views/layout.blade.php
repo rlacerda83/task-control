@@ -9,14 +9,12 @@
 
     {{ Html::style('styles/bootstrap/bootstrap.min.css') }}
     {{ Html::style('styles/libs/font-awesome.css') }}
-    {{ Html::style('styles/libs/nanoscroller.css') }}
     {{ Html::style('styles/libs/jasny-bootstrap.css') }}
     {{ Html::style('styles/compiled/theme_styles.css') }}
     {{ Html::style('styles/extras.css') }}
 
     {{ Html::style('styles/libs/jquery.isloading.css') }}
     {{ Html::style('styles/libs/datepicker.css') }}
-    {{ Html::style('styles/libs/daterangepicker.css') }}
     {{ Html::style('styles/libs/bootstrap-tagsinput.css') }}
     {{ Html::style('styles/libs/jquery.bootstrap-touchspin.css') }}
 
@@ -27,22 +25,19 @@
     {{ Html::style('styles/libs/ns-style-other.css') }}
     {{ Html::style('styles/libs/ns-style-theme.css') }}
 
-    {{--<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400">--}}
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400">
 
     @yield('head-css')
 
             <!-- Global Javascript -->
     {{ Html::script('scripts/jquery.js') }}
     {{ Html::script('scripts/bootstrap.js') }}
-    {{ Html::script('scripts/jquery.nanoscroller.min.js') }}
     {{ Html::script('scripts/jquery.maskedinput.min.js') }}
-    {{ Html::script('scripts/jquery.maskmoney.js') }}
     {{ Html::script('scripts/validation/jquery.validate.min.js') }}
 
     <!-- JS Extras -->
     {{ Html::script('scripts/extras.js') }}
     {{ Html::script('scripts/bootstrap-datepicker.js') }}
-    {{ Html::script('scripts/moment.min.js') }}
     {{ Html::script('scripts/locales/bootstrap-datepicker.pt-BR.js') }}
     {{ Html::script('scripts/jquery.bootstrap-touchspin.js') }}
 
@@ -56,8 +51,6 @@
 
     {{ Html::script('scripts/modalEffects.js') }}
     {{ Html::script('scripts/modernizr.custom.js') }}
-    {{ Html::script('scripts/snap.svg-min.js') }}
-    {{ Html::script('scripts/classie.js') }}
     {{ Html::script('scripts/jquery.isloading.js') }}
     {{ Html::script('scripts/bootstrap-tagsinput.min.js') }}
 
@@ -71,7 +64,7 @@
     @yield('head-script')
 </head>
 
-<body class="theme-turquoise fixed-header">
+<body class="theme-blue-gradient fixed-header">
 
     <div id="theme-wrapper">
         @include('header')
@@ -91,5 +84,6 @@
     <!-- theme scripts -->
     {{ Html::script('scripts/scripts.js') }}
     {{ Html::script('scripts/pace.min.js') }}
+    @yield('bottom-script')
 </body>
 </html>

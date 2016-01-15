@@ -12,7 +12,7 @@ class SetupApplication extends Command
      *
      * @var string
      */
-    protected $signature = 'install';
+    protected $signature = 'install {--sed} {--no-db}';
 
     /**
      * The console command description.
@@ -21,12 +21,30 @@ class SetupApplication extends Command
      */
     protected $description = 'Setup application';
 
+    /**
+     * @var string
+     */
     protected $phpPath;
 
+    /**
+     * @var mixed
+     */
     protected $baseDir;
 
+    /**
+     * @var string
+     */
     protected $userName;
 
+    /**
+     * @var mixed
+     */
+    protected $serverName;
+
+
+    /**
+     * @var
+     */
     protected $bar;
 
 
@@ -36,6 +54,7 @@ class SetupApplication extends Command
         $this->phpPath = exec('which php');
         $this->baseDir = str_replace('/app', '', app_path());
         $this->userName = exec('whoami');
+        $this->serverName = env('APP_SERVER_NAME', 'taskcontrol.localhost');
     }
 
     /**
@@ -47,36 +66,43 @@ class SetupApplication extends Command
     {
         try {
             DB::beginTransaction();
-            $this->info('Setting up database migrations...');
 
-            $this->bar = $this->output->createProgressBar(10);
+            $this->bar = $this->output->createProgressBar($this->getTotalBar());
             $this->bar->setFormat('debug');
+            $this->info(' ');
 
-            $this->info('Creating databse...');
-            $this->createDatabase();
-            $this->advanceBar();
+            $this->call('key:generate');
 
-            $this->info('Installing migrations...');
-            //$this->call('migrate:install');
-            $this->advanceBar();
+            if (!$this->option('sed')) {
+                if (!$this->option('no-db')) {
+                    $this->info('Creating databse...');
+                    $this->createDatabase();
+                    $this->advanceBar();
 
-            $this->info('Running migrations...');
-            $this->call('migrate');
-            $this->advanceBar();
+                    $this->info('Installing migrations...');
+                    //$this->call('migrate:install');
+                    $this->advanceBar();
 
-            $this->info('Running composer...');
-            //shell_exec('composer install');
-            $this->advanceBar();
+                    $this->info('Running migrations...');
+                    $this->call('migrate');
+                    $this->advanceBar();
+                }
+
+                $this->info('Running composer...');
+                exec('composer install');
+                $this->advanceBar();
+            }
 
             $this->info('Generating supervisor configuration file...');
             $this->setupSupervisord();
             $this->advanceBar();
 
-            if ($this->confirm('Do you wish run the queue with cron?')) {
-                $this->setupCronTab();
-                $this->advanceBar();
-            }
+            $this->info('Generating cron line configuration ...');
+            $this->setupCronTab();
+            $this->advanceBar();
 
+            $this->info('Generating nginx configuration ...');
+            $this->setupNginx();
 
             $this->bar->finish();
             $this->info(' '. "\n");
@@ -98,36 +124,39 @@ class SetupApplication extends Command
 
     private function setupSupervisord()
     {
-        exec("rm -f {$this->baseDir}/task_control.conf");
-        exec("touch {$this->baseDir}/task_control.conf");      
-
-        $config = "
-[program:task-control-queue-listen]
-command={$this->phpPath} {$this->baseDir}/artisan queue:listen --sleep=3 --tries=3
-user={$this->userName}
-process_name=%(program_name)s_%(process_num)d
-directory={$this->baseDir}
-stdout_logfile={$this->baseDir}/storage/logs/supervisor.log
-redirect_stderr=true
-autostart=true
-autorestart=true
-startretries=3
-numprocs=2";
-
-        exec("sh -c 'echo \"$config\" >> {$this->baseDir}/task_control.conf'");
+        exec("rm -f {$this->baseDir}/supervisor");
+        exec("sed -e 's|#php_path|{$this->phpPath}|' -e 's|#base_dir|{$this->baseDir}|' -e 's|#user_name|{$this->userName}|' $this->baseDir/supervisor.template > $this->baseDir/supervisor");
     }
 
     private function setupCronTab()
     {
-        $this->info('Creating cron...');
-        $line = "* * * * * {$this->phpPath} {$this->baseDir}/artisan schedule:run 1>> /dev/null 2>&1";
-        $this->info($line);
-        exec('echo crontab -l | { cat; echo "'.$line.'"; } | crontab -');
+        exec("rm -f {$this->baseDir}/cron");
+        exec("sed -e 's|#php_path|{$this->phpPath}|' -e 's|#base_dir|{$this->baseDir}|' $this->baseDir/cron.template > $this->baseDir/cron");
+    }
+
+    private function setupNginx()
+    {
+        exec("rm -f {$this->baseDir}/cron");
+        exec("sed -e 's|#server_name|{$this->serverName}|' -e 's|#base_dir|{$this->baseDir}|' $this->baseDir/nginx.template > $this->baseDir/nginx");
     }
 
     private function advanceBar()
     {
         $this->bar->advance();
         $this->info(' '. "\n");
+    }
+
+    private function getTotalBar()
+    {
+        $total = 7;
+        if ($this->option('sed')) {
+            return 3;
+        }
+
+        if ($this->option('no-db')) {
+            return 4;
+        }
+
+        return $total;
     }
 }

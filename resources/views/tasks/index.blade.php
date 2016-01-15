@@ -26,13 +26,13 @@
                 <div class="main-box clearfix">
                     <div class="main-box-body listagem clearfix">
 
-                        <div id="toolbar" class="btn-group" style="margin-top: 10px">
+                        <div style="margin-top: 10px">
                             <a href="{{ URL::route('tasks.new') }}" class="btn btn-success">
                                 <i class="glyphicon glyphicon-plus"></i> New Task
                             </a>
 
-                            <a href="javascript:startProcess();" id="btn-process-tasks" class="btn btn-success">
-                                <i class="glyphicon glyphicon-plus"></i> Process synchronous
+                            <a href="javascript:startProcess();" id="btn-process-tasks" class="btn btn-danger pull-right">
+                                <i class="glyphicon glyphicon-tasks"></i> Process tasks
                             </a>
                             <div id="filter-bar"></div>
                         </div>
@@ -68,8 +68,8 @@
                     )) }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" onclick="startProcess();" data-dismiss="modal" id="btn-ps">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="startProcess();" data-dismiss="modal" id="btn-ps">Submit</button>
                 </div>
             </div>
 

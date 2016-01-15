@@ -135,13 +135,16 @@ Class TaskProcessor
         Log::info('Start process');
 
         $tasks = $this->taskRepository->getPending();
+        if (!$tasks->count()) {
+            return true;
+        }
 
         if ($bar !== null) {
             $bar->start($tasks->count() + 1);
         }
 
         $this->login();
-        $bar->advance();
+        $this->advanceBar($bar);
 
         foreach ($tasks as $task) {
             try {
@@ -152,12 +155,19 @@ Class TaskProcessor
                 $task->error_message = $e->getMessage();
                 $task->save();
             }
-            $bar->advance();
+            $this->advanceBar($bar);
         }
 
         Log::info('Finish process');
 
         return true;
+    }
+
+    private function advanceBar($bar = null)
+    {
+        if ($bar !== null) {
+            $bar->advance();
+        }
     }
 
     /**

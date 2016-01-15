@@ -15,8 +15,8 @@ $(document).ready(function() {
         toolbar: '#filter-bar',
         pagination: true,
         showfilter: true,
+        pageList: [],
         sortName: 'date',
-        pageSize: 10,
         sortOrder: 'DESC',
         search: false,
         columns: [{
@@ -94,16 +94,7 @@ $(document).ready(function() {
     });
 
     $('#filter-bar').bootstrapTableFilter({
-        connectTo: '#table-tasks',
-        onAll: function(name, args) {
-            var d = new Date();
-            $('#log').prepend(d.toLocaleString() + ': ' + name + "\n");
-        },
-        onSubmit: function(data) {
-            var data = $('#filter-bar').bootstrapTableFilter('getData');
-            var d = new Date();
-            $('#log').prepend(d.toLocaleString() + ': ' + JSON.stringify(data) + "\n");
-        }
+        connectTo: '#table-tasks'
     });
 });
 

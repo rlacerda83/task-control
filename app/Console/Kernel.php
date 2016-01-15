@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Run once a minute
-        $schedule->command('queue:work')->everyFiveMinutes();
+        // get jobs
+        $schedule->command('queue:work')->everyFiveMinutes()->withoutOverlapping();
     }
 }

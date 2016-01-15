@@ -3,5 +3,7 @@
 /node_modules
 Homestead.yaml
 Homestead.json
-task_control.conf
+supervisor
+cron
+nginx
 .env

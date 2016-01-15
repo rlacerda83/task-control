@@ -1,0 +1,11 @@
+[program:task-control-queue-listen]
+command=#php_path #base_dir/artisan queue:listen --sleep=3 --tries=3
+user=#user_name
+process_name=%(program_name)s_%(process_num)d
+directory=#base_dir
+stdout_logfile=#base_dir/storage/logs/task_control.log
+redirect_stderr=true
+autostart=true
+autorestart=true
+startretries=3
+numprocs=2
