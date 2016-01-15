@@ -21,6 +21,7 @@ Manages and automatically sends the tasks to Google!
 
 - Clone the repository
 - Rename the .env.example file to .env and edit the file by putting your settings
+- Create the database
 - Go to the project root and run `composer install`
 - Go to the project folder and run in the terminal: `php artisan install`
 - Configure the web server. If you use nginx copying the contents of the nginx file in the project root.

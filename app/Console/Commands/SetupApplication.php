@@ -75,16 +75,13 @@ class SetupApplication extends Command
 
             if (!$this->option('sed')) {
                 if (!$this->option('no-db')) {
-                    $this->info('Creating databse...');
-                    $this->createDatabase();
-                    $this->advanceBar();
 
                     $this->info('Installing migrations...');
-                    //$this->call('migrate:install');
+                    $this->call('migrate:install');
                     $this->advanceBar();
 
                     $this->info('Running migrations...');
-                    $this->call('migrate');
+                    $this->call('migrate:refresh');
                     $this->advanceBar();
                 }
             }
@@ -102,7 +99,7 @@ class SetupApplication extends Command
 
             $this->bar->finish();
             $this->info(' '. "\n");
-            $this->info('Done...');
+            $this->info('Done. Do not forget to configure your web server.');
             DB::commit();
         } catch (\Exception $e) {
             $this->info(' '. "\n");
@@ -144,7 +141,7 @@ class SetupApplication extends Command
 
     private function getTotalBar()
     {
-        $total = 6;
+        $total = 5;
         if ($this->option('sed')) {
             return 3;
         }
