@@ -14,6 +14,7 @@ Manages and automatically sends the tasks to Google!
 ## Upcoming Features
 - Implement cache
 - Send tasks using parallel requests
+- Minify css and js
 
 ## Setup
 
@@ -27,13 +28,17 @@ Manages and automatically sends the tasks to Google!
 - Configure the web server. If you use nginx copying the contents of the nginx file in the project root.
 
 #### Task process configuration
-To synchronize automatically tasks you need to enable automatic synchronization in the settings menu.
+To synchronize automatically tasks you need to enable automatic synchronization and enter your password in the settings menu.
 
 Tasks can be synchronized in the following ways:
 - Manually in the Tasks menu
+
 - Automatically using cron. To use this option simply copy the contents of the cron file in the project root and create a cron entry on your machine.
+
 - Automatically using supervisor. To use this option to copy the contents of the file supervisor in the project root and add the configuration to your supervisor.
+
 - Manually running on the terminal: `php artisan queue-listen` or `php artisan queue-work`. This option only works if automatic synchronization is enabled
+
 - Manually running `php artisan tasks:process`
 
 ## Contributing
