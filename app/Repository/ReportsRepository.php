@@ -67,4 +67,24 @@ class ReportsRepository
         return $query->first();
     }
 
+    /**
+     * @param Carbon|null $date
+     * @return mixed
+     */
+    public function getDaysWithoutFullHours($date = null)
+    {
+        $query = DB::table(self::TABLE)
+            ->select(
+                DB::raw('SUM(time) AS hours'),
+                'date'
+            )->groupBy('date')
+            ->having('hours', '<', 8);
+
+        if ($date) {
+            $query->where('date', '>=', $date->format('Y-m-d'));
+        }
+
+        return $query->get();
+    }
+
 }

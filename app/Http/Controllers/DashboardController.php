@@ -51,6 +51,18 @@ class DashboardController extends BaseController
 
         $lastTasks = $this->repository->getLastTasks();
 
+//         $invalidDays = $this->repository->getDaysWithoutFullHours($date);
+
+//         $period = new \DatePeriod(
+//      new \DateTime('2015-11-01'),
+//      new \DateInterval('P1D'),
+//      new \DateTime('2016-01-16')
+// );
+
+//         foreach( $period as $date) { $array[] = $date->format('Y-m-d'); }
+        
+//         print_r($array); die;
+
         $task = new Tasks();
         $task->status = Tasks::STATUS_PENDING;
         
