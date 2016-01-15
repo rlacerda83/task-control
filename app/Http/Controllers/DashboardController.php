@@ -50,7 +50,7 @@ class DashboardController extends BaseController
 
         $task = new Tasks();
         $task->status = Tasks::STATUS_PENDING;
-
+        
         return view('dashboard.index')
             ->with('hoursGraph', json_encode($hoursGraph))
             ->with('tasksGraph', json_encode($tasksGraph))

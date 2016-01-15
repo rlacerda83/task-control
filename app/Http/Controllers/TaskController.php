@@ -139,7 +139,8 @@ class TaskController extends BaseController
 
             $request->session()->flash('message', "Successfully created task");
             $request->session()->flash('success', true);
-            return redirect('tasks');
+            $redirect = $request->get('redirect', false) != false ? $request->get('redirect') : 'tasks';
+            return redirect()->route($redirect);
         }
 
         $request->session()->flash('message', "Method not allowed");

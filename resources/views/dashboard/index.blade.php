@@ -28,7 +28,6 @@
             <div class="col-lg-12">
                 <div id="content-header" class="clearfix">
                     <div class="pull-left">
-
                         <h1>Dashboard</h1>
                         <br><br>
                     </div>
@@ -46,7 +45,11 @@
                     <div class="main-box-body clearfix">
                         <div class="row">
                             <div class="col-md-9">
+                                @if(strlen($hoursGraph) < 3) 
+                                    <p>There is no tasks to show<p>
+                                @endif
                                 <div id="graph-bar" style="height: 240px; padding: 0px; position: relative;"></div>
+                            
                             </div>
 
                             <div class="col-md-3">
@@ -74,7 +77,7 @@
                                             </div>
                                         </div>
                                         <div class="progress">
-                                            <div style="width: {{ round(($totalsYear->totalProcessed/$totalsYear->total) * 100) }}%;" role="progressbar" class="progress-bar progress-bar-success">
+                                            <div style="width: {{ $totalsYear->total > 0 ? round(($totalsYear->totalProcessed/$totalsYear->total) * 100) : 0 }}%;" role="progressbar" class="progress-bar progress-bar-success">
                                             </div>
                                         </div>
                                     </li>
@@ -88,7 +91,7 @@
                                             </div>
                                         </div>
                                         <div class="progress">
-                                            <div style="width: {{ round(($totalsYear->totalPending/$totalsYear->total) * 100) }}%;" role="progressbar" class="progress-bar progress-bar-warning">
+                                            <div style="width: {{ $totalsYear->total > 0 ? round(($totalsYear->totalPending/$totalsYear->total) * 100) : 0 }}%;" role="progressbar" class="progress-bar progress-bar-warning">
                                             </div>
                                         </div>
                                     </li>
@@ -102,7 +105,7 @@
                                             </div>
                                         </div>
                                         <div class="progress">
-                                            <div style="width: {{ round(($totalsYear->totalError/$totalsYear->total) * 100) }}%;" role="progressbar" class="progress-bar progress-bar-danger">
+                                            <div style="width: {{ $totalsYear->total > 0 ? round(($totalsYear->totalError/$totalsYear->total) * 100) : 0 }}%;" role="progressbar" class="progress-bar progress-bar-danger">
                                             </div>
                                         </div>
                                     </li>
@@ -135,7 +138,7 @@
 
                     <div class="main-box-body clearfix">
                         <ul class="widget-todo">
-                            @foreach($lastTasks as $lastTask)
+                            @forelse($lastTasks as $lastTask)
                                 <li class="clearfix">
                                     <div class="name">
                                         <b>[{{ $lastTask->task }}]</b> - {{ str_limit($lastTask->description, 30) }}
@@ -146,7 +149,9 @@
                                         </span>
                                     </div>
                                 </li>
-                            @endforeach
+                            @empty
+                                <p>There is no registered tasks</p>
+                            @endforelse
                         </ul>
                     </div>
                 </div>
