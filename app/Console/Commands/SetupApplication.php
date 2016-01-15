@@ -27,7 +27,7 @@ class SetupApplication extends Command
     protected $phpPath;
 
     /**
-     * @var mixed
+     * @var string
      */
     protected $baseDir;
 
@@ -41,12 +41,10 @@ class SetupApplication extends Command
      */
     protected $serverName;
 
-
     /**
      * @var
      */
     protected $bar;
-
 
     public function __construct()
     {
