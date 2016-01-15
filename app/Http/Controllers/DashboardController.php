@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tasks;
+use App\Helpers\Date;
 use App\Repository\ReportsRepository;
 use Carbon\Carbon;
 use Illuminate\Routing\Controller as BaseController;
@@ -41,9 +42,11 @@ class DashboardController extends BaseController
         $tasksGraph = [];
         $labelsGraph = [];
         foreach ($graphData as $data) {
+            $auxDate = explode('-', $data->split_date);
+
             $hoursGraph[] = $data->hours;
             $tasksGraph[] = $data->tasks;
-            $labelsGraph[] = $data->split_date;
+            $labelsGraph[] = Date::$months[$auxDate[1]] . '/' . $auxDate[0];
         }
 
         $lastTasks = $this->repository->getLastTasks();

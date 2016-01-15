@@ -15,6 +15,7 @@
     {{ Html::script('scripts/jqplot/jqplot.highlighter.min.js') }}
     {{ Html::script('scripts/jqplot/jqplot.categoryAxisRenderer.min.js') }}
     {{ Html::script('scripts/jqplot/jqplot.enhancedLegendRenderer.min.js') }}
+    {{ Html::script('scripts/jqplot/jqplot.pointLabels.min.js') }}
     {{ Html::script('scripts/pages/dashboard.js') }}
 @stop
 

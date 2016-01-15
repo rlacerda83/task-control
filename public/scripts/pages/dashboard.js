@@ -1,6 +1,5 @@
 $(document).ready(function() {
     if ($('#graph-bar').length) {
-
         plot2 = $.jqplot('graph-bar', [s1, s2], {
             animate: true,
             animateReplot: true,

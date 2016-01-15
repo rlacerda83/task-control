@@ -4,6 +4,25 @@ namespace App\Helpers;
 
 class Date
 {
+
+    /**
+     * @var array
+     */
+    public static $months = [
+        '01' => 'jan',
+        '02' => 'feb',
+        '03' => 'mar',
+        '04' => 'apr',
+        '05' => 'may',
+        '06' => 'jun',
+        '07' => 'jul',
+        '08' => 'aug',
+        '09' => 'sep',
+        '10' => 'oct',
+        '11' => 'nov',
+        '12' => 'dec',
+    ];
+
     /**
      * Conversor o formato da data de dd/mm/aaaa para aaaa/mm/dd e vice-versa
      *
