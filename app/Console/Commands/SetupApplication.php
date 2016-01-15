@@ -87,10 +87,6 @@ class SetupApplication extends Command
                     $this->call('migrate');
                     $this->advanceBar();
                 }
-
-                $this->info('Running composer...');
-                exec('composer install');
-                $this->advanceBar();
             }
 
             $this->info('Generating supervisor configuration file...');
@@ -148,13 +144,13 @@ class SetupApplication extends Command
 
     private function getTotalBar()
     {
-        $total = 7;
+        $total = 6;
         if ($this->option('sed')) {
             return 3;
         }
 
         if ($this->option('no-db')) {
-            return 4;
+            return 3;
         }
 
         return $total;
