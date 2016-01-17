@@ -8,6 +8,10 @@
         var s1 = {!! $hoursGraph !!};
         var s2 = {!! $tasksGraph !!};
         var ticks = {!! $labelsGraph !!};
+
+        var sp1 = {!! $daysPendingHourGraph !!};
+        var sp2 = {!! $daysPendingHourPendingGraph !!};
+        var ticksP = {!! $daysPendingLabelsGraph !!};
     </script>
 
     {{ Html::script('scripts/jquery.jqplot.min.js') }}
@@ -38,7 +42,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="main-box">
+                        <div class="main-box">
                     <header class="main-box-header clearfix">
                         <h2 class="pull-left">Hours appointment of the last year</h2>
                     </header>
@@ -50,7 +54,7 @@
                                     <p>There is no tasks to show<p>
                                 @endif
                                 <div id="graph-bar" style="height: 240px; padding: 0px; position: relative;"></div>
-                            
+
                             </div>
 
                             <div class="col-md-3">
@@ -111,6 +115,25 @@
                                         </div>
                                     </li>
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="main-box">
+                    <header class="main-box-header clearfix">
+                        <h2 class="pull-left">Hours appointment of the last year</h2>
+                    </header>
+
+                    <div class="main-box-body clearfix">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="graph-bar-pending" style="height: 240px; padding: 0px; position: relative;"></div>
+
                             </div>
                         </div>
                     </div>

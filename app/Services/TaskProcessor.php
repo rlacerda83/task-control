@@ -86,7 +86,8 @@ Class TaskProcessor
 
 
     /**
-     * Teste constructor.
+     * @param null $password
+     * @throws \Exception
      */
     public function __construct($password = null)
     {

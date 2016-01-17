@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tasks;
 use App\Helpers\Date;
 use App\Repository\ReportsRepository;
+use App\Services\Reports;
 use Carbon\Carbon;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\View\View;
@@ -31,49 +32,37 @@ class DashboardController extends BaseController
         $this->repository = $repository;
     }
 
-
     public function indexAction()
     {
+        $reportsService = new Reports();
+
         $date = Carbon::now()->subYear(1);
+
         $totalsYear = $this->repository->getTotals($date);
-        $graphData = $this->repository->getDatatoDashboard($date);
-
-        $hoursGraph = [];
-        $tasksGraph = [];
-        $labelsGraph = [];
-        foreach ($graphData as $data) {
-            $auxDate = explode('-', $data->split_date);
-
-            $hoursGraph[] = $data->hours;
-            $tasksGraph[] = $data->tasks;
-            $labelsGraph[] = Date::$months[$auxDate[1]] . '/' . $auxDate[0];
-        }
-
+        $graphData = $reportsService->getDataToAppointmentGraph($date);
         $lastTasks = $this->repository->getLastTasks();
 
-//         $invalidDays = $this->repository->getDaysWithoutFullHours($date);
-
-//         $period = new \DatePeriod(
-//      new \DateTime('2015-11-01'),
-//      new \DateInterval('P1D'),
-//      new \DateTime('2016-01-16')
-// );
-
-//         foreach( $period as $date) { $array[] = $date->format('Y-m-d'); }
-        
-//         print_r($array); die;
+        $startDateAppointmentCheck = Carbon::now()->subMonth(1);
+        $endDateAppointmentCheck = Carbon::now()->format('Y-m-d');
+        $datesWithPendingAppointment = $reportsService->getDaysWithPendingAppointmentHours(
+            $startDateAppointmentCheck,
+            $endDateAppointmentCheck
+        );
 
         $task = new Tasks();
         $task->status = Tasks::STATUS_PENDING;
         
         return view('dashboard.index')
-            ->with('hoursGraph', json_encode($hoursGraph))
-            ->with('tasksGraph', json_encode($tasksGraph))
-            ->with('labelsGraph', json_encode($labelsGraph))
+            ->with('hoursGraph', json_encode($graphData['hoursGraph']))
+            ->with('tasksGraph', json_encode($graphData['tasksGraph']))
+            ->with('labelsGraph', json_encode($graphData['labelsGraph']))
             ->with('lastTasks', $lastTasks)
             ->with('statusLabels', self::$statusLabels)
             ->with('task', $task)
             ->with('redirect', 'dashboard')
-            ->with('totalsYear', $totalsYear);
+            ->with('totalsYear', $totalsYear)
+            ->with('daysPendingHourGraph', json_encode($datesWithPendingAppointment['hours']))
+            ->with('daysPendingHourPendingGraph', json_encode($datesWithPendingAppointment['hoursPending']))
+            ->with('daysPendingLabelsGraph', json_encode($datesWithPendingAppointment['date']));
     }
 }
