@@ -52,7 +52,7 @@ Class Reports
     {
         $datesWithPendingAppointment = $this->reportsRepository->getDaysWithoutFullHours($startDateAppointmentCheck);
         $period = Date::getDatesFromRange($startDateAppointmentCheck, $endDateAppointmentCheck);
-
+        $return = [];
         foreach ($period as $date) {
             if (Date::isWeekend($date)) {
                 continue;
@@ -62,8 +62,13 @@ Class Reports
                 continue;
             }
 
-            foreach ($datesWithPendingAppointment as $pendingDay) {
-                if ($date == $pendingDay->date) {
+            foreach ($datesWithPendingAppointment as $key => $pendingDay) {
+                if ($date == $pendingDay->date) { 
+                    if ($pendingDay->hours < 8) {
+                        $return[] = $pendingDay;
+                        continue(2);    
+                    }
+
                     continue(2);
                 }
             }
@@ -72,11 +77,11 @@ Class Reports
             $newDate->hours = 0;
             $newDate->hoursPending = 8;
             $newDate->date = $date;
-            $datesWithPendingAppointment[] = $newDate;
+            $return[] = $newDate;
         }
 
-        $this->sortByArrayObjectDate($datesWithPendingAppointment);
-        return $this->transformDataToGraph($datesWithPendingAppointment);
+        $this->sortByArrayObjectDate($return);
+        return $this->transformDataToGraph($return);
     }
 
     /**

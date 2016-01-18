@@ -126,7 +126,7 @@
             <div class="col-md-12">
                 <div class="main-box">
                     <header class="main-box-header clearfix">
-                        <h2 class="pull-left">Hours appointment of the last year</h2>
+                        <h2 class="pull-left">Days with appointment pendings</h2>
                     </header>
 
                     <div class="main-box-body clearfix">
