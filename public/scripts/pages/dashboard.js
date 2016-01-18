@@ -18,7 +18,7 @@ $(document).ready(function() {
                 seriesToggle: true
             },
             series:[
-                {label:'Hours'},
+                {label:'Worked Hours'},
                 {label:'Tasks'}
             ],
             seriesDefaults: {
@@ -54,7 +54,7 @@ $(document).ready(function() {
             },
             seriesColors:['#00749F', '#C7754C'],
             series:[
-                {label:'Hours'},
+                {label:'Reported Hours'},
                 {label:'Pending Hours'}
             ],
             seriesDefaults: {
