@@ -109,6 +109,9 @@ class TaskController extends BaseController
                 $request->session()->flash('message', "Invalid data, please check the following errors: ");
                 $request->session()->flash('validationErrros', $isValid);
 
+                $formattedDate = \Datetime::createFromFormat('Y-m-d', $request->get('date'));
+                $request->replace(['date' => $formattedDate->format('d/m/Y')]);
+
                 return redirect()
                     ->route($routeBack, [$routeBack == 'tasks.edit' ? $params['id'] : null])
                     ->withInput()
