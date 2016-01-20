@@ -70,7 +70,7 @@
             {{ Form::label('time', '* Time Spent') }}
             {{ Form::text('time', null, array(
                 'class'=>'form-control',
-                'maxlength' => 2,
+                'maxlength' => 4,
                 'placeholder'=>'Time Spent in hours',
                 'id' => 'time'
             )) }}
