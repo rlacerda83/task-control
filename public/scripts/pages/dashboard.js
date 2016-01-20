@@ -29,6 +29,11 @@ $(document).ready(function() {
                 xaxis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
                     ticks: ticks
+                },
+                yaxis: {
+                    tickOptions:{
+                        formatString: "%#.2f"
+                    }
                 }
             }
         });
@@ -65,6 +70,11 @@ $(document).ready(function() {
                 xaxis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
                     ticks: ticksP
+                },
+                yaxis: {
+                    tickOptions:{
+                        formatString: "%#.2f"
+                    }
                 }
             }
         });

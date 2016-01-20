@@ -31,7 +31,7 @@ Class Reports
         foreach ($graphData as $data) {
             $auxDate = explode('-', $data->split_date);
 
-            $hoursGraph[] = $data->hours;
+            $hoursGraph[] = (float) $data->hours;
             $tasksGraph[] = $data->tasks;
             $labelsGraph[] = Date::$months[$auxDate[1]] . '/' . $auxDate[0];
         }
@@ -92,8 +92,8 @@ Class Reports
     {
         $return = [];
         foreach ($object as $date) {
-            $return['hours'][] = $date->hours;
-            $return['hoursPending'][] = $date->hoursPending;
+            $return['hours'][] = (float) $date->hours;
+            $return['hoursPending'][] = (float) $date->hoursPending;
             $return['date'][] = substr(Date::conversion($date->date), 0, 5);
         }
 
