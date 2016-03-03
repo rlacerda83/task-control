@@ -1,6 +1,6 @@
 $(document).ready(function() {
     if ($('#graph-bar').length) {
-        plot2 = $.jqplot('graph-bar', [s1, s2, s3], {
+        plot2 = $.jqplot('graph-bar', [s1, s2], {
             animate: true,
             animateReplot: true,
             legend: {
@@ -30,6 +30,11 @@ $(document).ready(function() {
                 xaxis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
                     ticks: ticks
+                },
+                yaxis: {
+                    tickOptions:{
+                        formatString: "%#.2f"
+                    }
                 }
             }
         });
@@ -55,7 +60,7 @@ $(document).ready(function() {
             },
             seriesColors:['#00749F', '#C7754C'],
             series:[
-                {label:'Reported Hours'},
+                {label:'Hours'},
                 {label:'Pending Hours'}
             ],
             seriesDefaults: {
@@ -66,6 +71,11 @@ $(document).ready(function() {
                 xaxis: {
                     renderer: $.jqplot.CategoryAxisRenderer,
                     ticks: ticksP
+                },
+                yaxis: {
+                    tickOptions:{
+                        formatString: "%#.2f"
+                    }
                 }
             }
         });

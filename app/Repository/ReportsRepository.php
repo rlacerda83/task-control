@@ -78,9 +78,8 @@ class ReportsRepository
                 DB::raw('SUM(time) AS hours'),
                 DB::raw('8 - SUM(TIME) AS hoursPending'),
                 'date'
-            )->groupBy('date')
-            ->having('hours', '<', 8);
-
+            )->groupBy('date');
+            
         if ($date) {
             $query->where('date', '>=', $date->format('Y-m-d'));
         }

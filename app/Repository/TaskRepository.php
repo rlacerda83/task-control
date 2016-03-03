@@ -14,7 +14,7 @@ class TaskRepository
 
     public static $rules = [
         'description' => 'required|max:200',
-        'time' => 'required|integer',
+        'time' => 'required|numeric',
         'task' => 'required|max:150',
         'date' => 'required|date'
     ];

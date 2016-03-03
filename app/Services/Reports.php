@@ -68,8 +68,13 @@ Class Reports
                 continue;
             }
 
-            foreach ($datesWithPendingAppointment as $pendingDay) {
+            foreach ($datesWithPendingAppointment as $key => $pendingDay) {
                 if ($date == $pendingDay->date) {
+                    if ($pendingDay->hours < 8) {
+                        $return[] = $pendingDay;
+                        continue(2);
+                    }
+
                     continue(2);
                 }
             }
@@ -78,11 +83,11 @@ Class Reports
             $newDate->hours = 0;
             $newDate->hoursPending = 8;
             $newDate->date = $date;
-            $datesWithPendingAppointment[] = $newDate;
+            $return[] = $newDate;
         }
 
-        $this->sortByArrayObjectDate($datesWithPendingAppointment);
-        return $this->transformDataToGraph($datesWithPendingAppointment);
+        $this->sortByArrayObjectDate($return);
+        return $this->transformDataToGraph($return);
     }
 
     public function getTotalHoursByMonth($year, $month)
@@ -115,8 +120,8 @@ Class Reports
     {
         $return = [];
         foreach ($object as $date) {
-            $return['hours'][] = $date->hours;
-            $return['hoursPending'][] = $date->hoursPending;
+            $return['hours'][] = (float) $date->hours;
+            $return['hoursPending'][] = (float) $date->hoursPending;
             $return['date'][] = substr(Date::conversion($date->date), 0, 5);
         }
 
