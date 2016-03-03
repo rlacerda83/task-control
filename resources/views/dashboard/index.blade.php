@@ -128,7 +128,6 @@
                 <div class="main-box">
                     <header class="main-box-header clearfix">
                         <h2 class="pull-left">Days with appointment pending hours</h2>
-                        <h2 class="pull-left">Days with appointment pendings</h2>
                     </header>
 
                     <div class="main-box-body clearfix">
