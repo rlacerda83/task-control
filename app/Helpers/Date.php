@@ -71,6 +71,7 @@ class Date
             Carbon::create($year, 4, 21)->format('Y-m-d'),
             Carbon::create($year, 5, 1)->format('Y-m-d'),
             date('Y-m-d', $dates['corpus_christi']),
+            Carbon::create($year, 7, 9)->format('Y-m-d'),
             Carbon::create($year, 9, 7)->format('Y-m-d'),
             Carbon::create($year, 10, 12)->format('Y-m-d'),
             Carbon::create($year, 11, 2)->format('Y-m-d'),

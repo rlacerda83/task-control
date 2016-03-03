@@ -28,18 +28,24 @@ Class Reports
         $hoursGraph = [];
         $tasksGraph = [];
         $labelsGraph = [];
+        $monthHours = [];
+        $percentageHours = [];
         foreach ($graphData as $data) {
             $auxDate = explode('-', $data->split_date);
-
+            $hoursInMonth = $this->getTotalHoursByMonth($auxDate[0], $auxDate[1]);
+            $monthHours[] = $hoursInMonth;
+            $percentageHours[] = round(($data->hours / $hoursInMonth) * 100, 2);
             $hoursGraph[] = $data->hours;
             $tasksGraph[] = $data->tasks;
             $labelsGraph[] = Date::$months[$auxDate[1]] . '/' . $auxDate[0];
         }
 
         return [
+            'monthGraph' => $monthHours,
             'hoursGraph' => $hoursGraph,
             'tasksGraph' => $tasksGraph,
-            'labelsGraph' => $labelsGraph
+            'labelsGraph' => $labelsGraph,
+            'percentageGraph' => $percentageHours
         ];
     }
 
@@ -77,6 +83,28 @@ Class Reports
 
         $this->sortByArrayObjectDate($datesWithPendingAppointment);
         return $this->transformDataToGraph($datesWithPendingAppointment);
+    }
+
+    public function getTotalHoursByMonth($year, $month)
+    {
+        $startDate = Carbon::create($year, $month, 01);
+        $endDate = Carbon::create($year, $month, 01)->endOfMonth();
+        $period = Date::getDatesFromRange($startDate, $endDate);
+
+        $hours = 0;
+        foreach ($period as $date) {
+            if (Date::isWeekend($date)) {
+                continue;
+            }
+
+            if (Date::isHoliday($date)) {
+                continue;
+            }
+
+            $hours += 8;
+        }
+
+        return $hours;
     }
 
     /**

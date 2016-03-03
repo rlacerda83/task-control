@@ -6,7 +6,8 @@
 
     <script>
         var s1 = {!! $hoursGraph !!};
-        var s2 = {!! $tasksGraph !!};
+        var s2 = {!! $monthGraph !!};
+        var s3 = {!! $percentageGraph !!};
         var ticks = {!! $labelsGraph !!};
 
         var sp1 = {!! $daysPendingHourGraph !!};

@@ -1,6 +1,6 @@
 $(document).ready(function() {
     if ($('#graph-bar').length) {
-        plot2 = $.jqplot('graph-bar', [s1, s2], {
+        plot2 = $.jqplot('graph-bar', [s1, s2, s3], {
             animate: true,
             animateReplot: true,
             legend: {
@@ -13,13 +13,14 @@ $(document).ready(function() {
                 marginRight: "100",
                 rendererOptions: {
                     numberRows: '1',
-                    numberColumns: '2'
+                    numberColumns: '3'
                 },
                 seriesToggle: true
             },
             series:[
                 {label:'Worked Hours'},
-                {label:'Tasks'}
+                {label:'Month Hours'},
+                {label:'Percentage'}
             ],
             seriesDefaults: {
                 renderer: $.jqplot.BarRenderer,

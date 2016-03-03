@@ -54,6 +54,8 @@ class DashboardController extends BaseController
         
         return view('dashboard.index')
             ->with('hoursGraph', json_encode($graphData['hoursGraph']))
+            ->with('monthGraph', json_encode($graphData['monthGraph']))
+            ->with('percentageGraph', json_encode($graphData['percentageGraph']))
             ->with('tasksGraph', json_encode($graphData['tasksGraph']))
             ->with('labelsGraph', json_encode($graphData['labelsGraph']))
             ->with('lastTasks', $lastTasks)
