@@ -40,6 +40,18 @@ $(document).ready(function() {
         });
     }
 
+    plot3 = $.jqplot('graph-bar-goal', [120], {
+        seriesDefaults: {
+            renderer: $.jqplot.MeterGaugeRenderer,
+            rendererOptions: {
+                min: 0,
+                max: 200,
+                intervals: [0, 50, 100, monthHours],
+                intervalColors: ['#66cc66', '#93b75f', '#E7E658', '#cc6666']
+            }
+        }
+    });
+
     if ($('#graph-bar-pending').length) {
         plot = $.jqplot('graph-bar-pending', [sp1, sp2], {
             animate: true,
