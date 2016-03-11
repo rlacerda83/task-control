@@ -66,6 +66,7 @@ class Date
         $dates['corpus_christi'] = $dates['easter'] + (60 * $day);
         $holidays = array (
             Carbon::create($year, 1, 1)->format('Y-m-d'),
+            Carbon::create($year, 1, 25)->format('Y-m-d'),
             date('Y-m-d', $dates['carnival']),
             date('Y-m-d', $dates['good_friday']),
             Carbon::create($year, 4, 21)->format('Y-m-d'),
