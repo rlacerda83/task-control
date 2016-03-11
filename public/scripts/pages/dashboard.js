@@ -40,14 +40,17 @@ $(document).ready(function() {
         });
     }
 
-    plot3 = $.jqplot('graph-bar-goal', [120], {
+    plot3 = $.jqplot('graph-bar-goal', [[120]], {
         seriesDefaults: {
             renderer: $.jqplot.MeterGaugeRenderer,
             rendererOptions: {
+                label: monthHours + ' worked hours',
+                labelPosition: 'bottom',
+                labelHeightAdjust: -5,
                 min: 0,
-                max: 200,
+                max: monthHours,
                 intervals: [0, 50, 100, monthHours],
-                intervalColors: ['#66cc66', '#93b75f', '#E7E658', '#cc6666']
+                intervalColors: ['#cc6666', '#E7E658', '#93b75f', '#66cc66' ]
             }
         }
     });
@@ -106,6 +109,13 @@ $(document).ready(function() {
                 series.barWidth = undefined;
             });
             plot.replot();
+        }
+
+        if (plot3) {
+            $.each(plot3.series, function(index, series) {
+                series.barWidth = undefined;
+            });
+            plot3.replot();
         }
     });
 });

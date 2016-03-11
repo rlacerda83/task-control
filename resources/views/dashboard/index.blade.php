@@ -64,7 +64,7 @@
                                 @if(strlen($hoursGraph) < 3)
                                     <p>There is no tasks to show<p>
                                 @endif
-                                <div id="graph-bar" style="height: 240px; padding: 0px; position: relative;"></div>
+                                <div id="graph-bar-goal" style="height: 240px; padding: 0px; position: relative;"></div>
                             </div>
                         </div>
                     </div>
