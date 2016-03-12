@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\Inspire::class,
         Commands\ProcessTasks::class,
+        Commands\HasPendingHours::class,
         Commands\SetupApplication::class
     ];
 
@@ -28,5 +29,9 @@ class Kernel extends ConsoleKernel
     {
         // get jobs
         $schedule->command('queue:work')->everyFiveMinutes()->withoutOverlapping();
+
+        $schedule->command('tasks:pending')->dailyAt('11:00')->withoutOverlapping();
+
+        $schedule->command('tasks:pending')->dailyAt('17:00')->withoutOverlapping();
     }
 }

@@ -15,6 +15,7 @@
         var ticksP = {!! $daysPendingLabelsGraph !!};
 
         var monthHours = {!! $monthHours !!};
+        var monthWorkedHours = {!! $monthWorkedHours !!};
     </script>
 
     {{ Html::script('scripts/jquery.jqplot.min.js') }}

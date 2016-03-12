@@ -36,22 +36,6 @@ class DashboardController extends BaseController
 
     public function indexAction()
     {
-        // Create a Notifier (or null if no notifier supported)
-        $notifier = NotifierFactory::create();
-
-        if ($notifier) {
-            // Create your notification
-            $notification =
-                (new Notification())
-                    ->setTitle('Notification title')
-                    ->setBody('This is the body of your notification')
-                    ->setIcon(__DIR__.'/path/to/your/icon.png')
-            ;
-
-            // Send it
-            $notifier->send($notification);
-        }
-
         $reportsService = new Reports();
 
         $date = Carbon::now()->subYear(1);
@@ -70,11 +54,14 @@ class DashboardController extends BaseController
         $task = new Tasks();
         $task->status = Tasks::STATUS_PENDING;
 
-        $monthHours = $reportsService->getTotalHoursByMonth(Carbon::now()->year, Carbon::now()->month);
-        
+        $month = Carbon::now()->month;
+        $monthHours = $reportsService->getTotalHoursByMonth(Carbon::now()->year, $month);
+        $monthWorkedHours = isset($graphData['hoursGraph'][$month]) ? $graphData['hoursGraph'][$month] : 0;
+
         return view('dashboard.index')
             ->with('hoursGraph', json_encode($graphData['hoursGraph']))
             ->with('monthGraph', json_encode($graphData['monthGraph']))
+            ->with('monthWorkedHours', $monthWorkedHours)
             ->with('percentageGraph', json_encode($graphData['percentageGraph']))
             ->with('tasksGraph', json_encode($graphData['tasksGraph']))
             ->with('labelsGraph', json_encode($graphData['labelsGraph']))

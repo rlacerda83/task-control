@@ -58,6 +58,7 @@ Class Reports
     {
         $datesWithPendingAppointment = $this->reportsRepository->getDaysWithoutFullHours($startDateAppointmentCheck);
         $period = Date::getDatesFromRange($startDateAppointmentCheck, $endDateAppointmentCheck);
+        $return = [];
 
         foreach ($period as $date) {
             if (Date::isWeekend($date)) {

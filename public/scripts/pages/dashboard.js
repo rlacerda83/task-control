@@ -40,13 +40,12 @@ $(document).ready(function() {
         });
     }
 
-    plot3 = $.jqplot('graph-bar-goal', [[120]], {
+    plot3 = $.jqplot('graph-bar-goal', [[monthWorkedHours]], {
         seriesDefaults: {
             renderer: $.jqplot.MeterGaugeRenderer,
             rendererOptions: {
-                label: monthHours + ' worked hours',
+                label: 'You need ' + (monthHours - monthWorkedHours) + '  hours to reach the goal',
                 labelPosition: 'bottom',
-                labelHeightAdjust: -5,
                 min: 0,
                 max: monthHours,
                 intervals: [0, 50, 100, monthHours],
