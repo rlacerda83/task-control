@@ -32,6 +32,6 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('tasks:pending')->dailyAt('11:00')->withoutOverlapping();
 
-        $schedule->command('tasks:pending')->dailyAt('17:00')->withoutOverlapping();
+        $schedule->command('tasks:pending')->everyMinute()->withoutOverlapping();
     }
 }

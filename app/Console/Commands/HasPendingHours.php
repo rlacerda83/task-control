@@ -34,6 +34,7 @@ class HasPendingHours extends Command
      */
     public function handle()
     {
+        putenv('DISPLAY=:0');
         $this->comment(PHP_EOL. 'Start pending hours validation' .PHP_EOL);
 
         $referenceDate = Carbon::now();
@@ -51,29 +52,33 @@ class HasPendingHours extends Command
             $date = Carbon::now()->subDay(1);
         }
 
-        $PendingAppointment = $reportsService->getDaysWithPendingAppointmentHours(
+        $date = Carbon::now()->subDay(1);
+        $this->info(PHP_EOL. 'Checking ' . $date->format('d/m/Y') .PHP_EOL);
+
+        $pendingAppointment = $reportsService->getDaysWithPendingAppointmentHours(
             $date,
             $date
         );
 
-        if (isset($PendingAppointment['hoursPending'][0]) && $PendingAppointment['hoursPending'][0] < 8) {
+        if (isset($pendingAppointment['hoursPending'][0]) && $pendingAppointment['hoursPending'][0] > 0) {
             $notifier = NotifierFactory::create();
 
             $message = sprintf(
                 'You have pending hours in the day %s. You need to send %s hours.',
-                $PendingAppointment['date'][0],
-                $PendingAppointment['hoursPending'][0]
+                $pendingAppointment['date'][0],
+                $pendingAppointment['hoursPending'][0]
             );
 
-            $this->comment(PHP_EOL. $message .PHP_EOL);
+            $this->error(PHP_EOL. $message .PHP_EOL);
 
             if ($notifier) {
+                $this->error(PHP_EOL. 'Notificando...' .PHP_EOL);
                 // Create your notification
                 $notification =
                     (new Notification())
                         ->setTitle('Pending Hours')
                         ->setBody($message)
-                        ->setIcon(__DIR__.'/path/to/your/icon.png')
+                        ->setIcon(__DIR__.'/../../../public/img/clock.png')
                 ;
 
                 // Send it
