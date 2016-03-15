@@ -70,7 +70,6 @@ class HasPendingHours extends Command
             $this->error(PHP_EOL. $message .PHP_EOL);
 
             if ($notifier) {
-                $this->error(PHP_EOL. 'Notificando...' .PHP_EOL);
                 // Create your notification
                 $notification =
                     (new Notification())
