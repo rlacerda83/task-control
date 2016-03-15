@@ -34,7 +34,6 @@ class HasPendingHours extends Command
      */
     public function handle()
     {
-        putenv('DISPLAY=:0');
         $this->comment(PHP_EOL. 'Start pending hours validation' .PHP_EOL);
 
         $referenceDate = Carbon::now();
@@ -52,7 +51,6 @@ class HasPendingHours extends Command
             $date = Carbon::now()->subDay(1);
         }
 
-        $date = Carbon::now()->subDay(1);
         $this->info(PHP_EOL. 'Checking ' . $date->format('d/m/Y') .PHP_EOL);
 
         $pendingAppointment = $reportsService->getDaysWithPendingAppointmentHours(

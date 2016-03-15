@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tasks;
-use App\Helpers\Date;
 use App\Repository\ReportsRepository;
 use App\Services\Reports;
 use Carbon\Carbon;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\View\View;
 use Joli\JoliNotif\Notification;
 use Joli\JoliNotif\NotifierFactory;
 
@@ -40,7 +38,7 @@ class DashboardController extends BaseController
 
         $date = Carbon::now()->subYear(1);
 
-        //$totalsYear = $this->repository->getTotals($date);
+        $totalsYear = $this->repository->getTotals($date);
         $graphData = $reportsService->getDataToAppointmentGraph($date);
         $lastTasks = $this->repository->getLastTasks();
 
@@ -51,24 +49,28 @@ class DashboardController extends BaseController
             $endDateAppointmentCheck
         );
 
+        $pendingHoursMessage = false;
+        foreach ($datesWithPendingAppointment['hoursPending'] as $hours) {
+            if ($hours >= 4) {
+                $pendingHoursMessage = true;
+                break;
+            }
+        }
+
         $task = new Tasks();
         $task->status = Tasks::STATUS_PENDING;
-
-        $month = Carbon::now()->month;
-        $monthHours = $reportsService->getTotalHoursByMonth(Carbon::now()->year, $month);
-        $monthWorkedHours = isset($graphData['hoursGraph'][$month]) ? $graphData['hoursGraph'][$month] : 0;
 
         return view('dashboard.index')
             ->with('hoursGraph', json_encode($graphData['hoursGraph']))
             ->with('monthGraph', json_encode($graphData['monthGraph']))
-            ->with('monthWorkedHours', $monthWorkedHours)
+            ->with('totalsYear', $totalsYear)
             ->with('percentageGraph', json_encode($graphData['percentageGraph']))
             ->with('tasksGraph', json_encode($graphData['tasksGraph']))
             ->with('labelsGraph', json_encode($graphData['labelsGraph']))
             ->with('lastTasks', $lastTasks)
             ->with('statusLabels', self::$statusLabels)
-            ->with('monthHours', $monthHours)
             ->with('task', $task)
+            ->with('pendingHoursMessage', $pendingHoursMessage)
             ->with('redirect', 'dashboard')
             ->with('daysPendingHourGraph', json_encode($datesWithPendingAppointment['hours']))
             ->with('daysPendingHourPendingGraph', json_encode($datesWithPendingAppointment['hoursPending']))
