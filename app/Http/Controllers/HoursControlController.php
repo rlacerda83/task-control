@@ -14,7 +14,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\View\View;
 
-class TaskController extends BaseController
+class HoursControlController extends BaseController
 {
     /**
      * @var HoursControlRepository
@@ -44,7 +44,7 @@ class TaskController extends BaseController
         $rows = [];
         foreach ($hourControls as $hourControl) {
             $row = json_decode(json_encode($hourControl), true);
-            $row['date'] = Date::conversion($hourControl->date);
+            $row['day'] = Date::conversion($hourControl->day);
             $row['edit'] = route('hours-control.edit', ['id' => $hourControl->id]);
             $row['delete'] = route('hours-control.remove', ['id' => $hourControl->id]);
             $rows[] = $row;
@@ -84,7 +84,7 @@ class TaskController extends BaseController
     public function saveAction(Request $request)
     {
         $params = $request->all();
-        $params['date'] = Date::conversion($params['date']);
+        $params['date'] = Date::conversion($params['day']);
 
         $request->replace($params);
 
@@ -107,8 +107,8 @@ class TaskController extends BaseController
                 $request->session()->flash('message', "Invalid data, please check the following errors: ");
                 $request->session()->flash('validationErrros', $isValid);
 
-                $formattedDate = \Datetime::createFromFormat('Y-m-d', $request->get('date'));
-                $request->replace(['date' => $formattedDate->format('d/m/Y')]);
+                $formattedDate = \Datetime::createFromFormat('Y-m-d', $request->get('day'));
+                $request->replace(['day' => $formattedDate->format('d/m/Y')]);
 
                 return redirect()
                     ->route($routeBack, [$routeBack == 'hours-control.edit' ? $params['id'] : null])

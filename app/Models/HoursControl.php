@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class HoursControl extends Model
 {
 
-    protected $fillable = ['date', 'time'];
+    protected $fillable = ['day', 'time'];
 
 }
