@@ -14,7 +14,7 @@ class HoursControlRepository
 
     public static $rules = [
         'time' => 'required',
-        'date' => 'required|date'
+        'day' => 'required|date'
     ];
 
     /**

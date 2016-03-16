@@ -8,6 +8,7 @@ use App\Models\Tasks;
 use App\Repository\HoursControlRepository;
 use App\Services\TaskProcessor;
 use App\Repository\TaskRepository;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -71,7 +72,7 @@ class HoursControlController extends BaseController
                 return redirect('hours-control');
             }
 
-            $hourControl->date = Date::conversion($hourControl->date);
+            $hourControl->day = Date::conversion($hourControl->day);
             return view('hours-control.form', [
                 'hourControl' => $hourControl
             ]);
@@ -84,7 +85,7 @@ class HoursControlController extends BaseController
     public function saveAction(Request $request)
     {
         $params = $request->all();
-        $params['date'] = Date::conversion($params['day']);
+        $params['day'] = Date::conversion($params['day']);
 
         $request->replace($params);
 
@@ -125,7 +126,7 @@ class HoursControlController extends BaseController
                     return redirect('hours-control');
                 }
 
-                $hourControl = Tasks::findOrNew($params['id']);
+                $hourControl = HoursControl::findOrNew($params['id']);
                 $hourControl->fill($params);
                 $hourControl->update();
 
@@ -153,7 +154,11 @@ class HoursControlController extends BaseController
      */
     public function newAction()
     {
+        $now = Carbon::now();
         $hourControl = new HoursControl();
+        $hourControl->day = $now->format('d/m/Y');
+        $hourControl->time = $now->format('H:i:s');
+
         return view('hours-control.form', [
             'hourControl' => $hourControl
         ]);
