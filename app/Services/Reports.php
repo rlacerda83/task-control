@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use App\Helpers\Date;
-use App\Models\Tasks;
 use App\Repository\ReportsRepository;
-use App\Repository\TaskRepository;
 use Carbon\Carbon;
 
 Class Reports

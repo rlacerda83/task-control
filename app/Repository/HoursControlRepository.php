@@ -87,9 +87,19 @@ class HoursControlRepository
         return $paginator;
     }
 
-    public function getPending()
+    public function getHoursByMonth($date = null)
     {
-        return Tasks::where('status', '<>', Tasks::STATUS_PROCESSED)->get();
+        $query = DB::table(self::TABLE)
+            ->groupBy('split_date')
+            ->orderBy('date', 'ASC');
+
+        if ($date) {
+            $query->where('date', '>=', $date->format('Y-m-d'));
+        }
+
+        return $query->get();
     }
+
+
 
 }

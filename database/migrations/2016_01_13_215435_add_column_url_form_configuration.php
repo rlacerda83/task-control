@@ -12,8 +12,9 @@ class AddColumnUrlFormConfiguration extends Migration
      */
     public function up()
     {
-        Schema::table('configuration', function ($table) {
-            $table->string('url_form')->nullable();
+        Schema::table('hours_control', function ($table) {
+            $table->tinyInteger('consolidate')->default(0);
+            $table->date('base_date')->nullable();
         });
     }
 
@@ -25,7 +26,8 @@ class AddColumnUrlFormConfiguration extends Migration
     public function down()
     {
         Schema::table('configuration', function ($table) {
-            $table->dropColumn(['url_form']);
+            $table->dropColumn(['consolidate']);
+            $table->dropColumn(['base_date']);
         });
     }
 }

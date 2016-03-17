@@ -1,6 +1,7 @@
 @section('bottom-script')
     <script>
         $(document).ready(function() {
+            $('#time').mask("99:99?:99");
             $.fn.datepicker.defaults.format = "dd/mm/yyyy";
             $('#day').datepicker();
 
