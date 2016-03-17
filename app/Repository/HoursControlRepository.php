@@ -87,19 +87,14 @@ class HoursControlRepository
         return $paginator;
     }
 
-    public function getHoursByMonth($date = null)
+    public function getHoursByDate($startDate, $endDate)
     {
         $query = DB::table(self::TABLE)
-            ->groupBy('split_date')
-            ->orderBy('date', 'ASC');
-
-        if ($date) {
-            $query->where('date', '>=', $date->format('Y-m-d'));
-        }
+            ->whereBetween('day', array($startDate, $endDate))
+            ->orderBy('day', 'ASC')
+            ->orderBy('time', 'ASC');
 
         return $query->get();
     }
-
-
 
 }

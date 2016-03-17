@@ -43,6 +43,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/hours-control/edit/{id}', ['as' => 'hours-control.edit', 'uses' => 'HoursControlController@editAction']);
     Route::post('/hours-control/save', ['as' => 'hours-control.save', 'uses' => 'HoursControlController@saveAction']);
     Route::get('/hours-control/remove/{id}', ['as' => 'hours-control.remove', 'uses' => 'HoursControlController@removeAction']);
+    Route::get('/hours-control/report', ['as' => 'hours-control.report', 'uses' => 'HoursControlController@reportAction']);
 
     //config
     Route::post('/configuration/save', ['as' => 'configuration.save', 'uses' => 'ConfigurationController@saveAction']);
