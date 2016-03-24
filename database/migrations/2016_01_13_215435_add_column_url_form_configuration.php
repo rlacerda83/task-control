@@ -5,16 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddColumnUrlFormConfiguration extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
-        Schema::table('hours_control', function ($table) {
-            $table->tinyInteger('consolidate')->default(0);
-            $table->date('base_date')->nullable();
+        Schema::table('configuration', function ($table) {
+            $table->string('url_form')->nullable();
         });
     }
 
@@ -26,8 +21,7 @@ class AddColumnUrlFormConfiguration extends Migration
     public function down()
     {
         Schema::table('configuration', function ($table) {
-            $table->dropColumn(['consolidate']);
-            $table->dropColumn(['base_date']);
+            $table->dropColumn(['url_form']);
         });
     }
 }
