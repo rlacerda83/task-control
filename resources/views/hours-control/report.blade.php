@@ -70,7 +70,7 @@
                             )) !!}
 
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-5">
                                     {{ Form::label('startDate', '* Start Date') }}
                                     {{ Form::text('startDate', $startDate, array(
                                         'class'=>'form-control',
@@ -81,7 +81,7 @@
 
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-5">
                                     {{ Form::label('endDate', '* End Date') }}
                                     {{ Form::text('endDate', $endDate, array(
                                         'class'=>'form-control',
@@ -92,7 +92,7 @@
 
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-2">
                                     {{ Form::submit('Submit', array(
                                         'class'=>'btn btn-success',
                                         'style' => 'margin-top:23px'
@@ -105,8 +105,12 @@
                     </div>
 
                     @if(count($hours))
-                        <legend>Report</legend>
-                        <div class="main-box-body listagem clearfix">
+                        <div class="main-box-body clearfix">
+                            <legend>Report</legend>
+
+                            <h4><b>Working hours of the period:</b> {{ $hours['workingHours'] }} </h4>
+                            <h4><b>Total worked hours:</b> {{ $hours['totalWorkedHours'] }}</h4>
+
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -117,8 +121,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @forelse($hours as $day => $arrHours)
-                                    <tr class="{{ $hours[$day]['class'] }}">
+                                @forelse($hours['days'] as $day => $arrHours)
+                                    <tr class="{{ $hours['days'][$day]['class'] }}">
                                         <td>{{ $day }}</td>
 
                                         <td>
@@ -131,7 +135,7 @@
                                             {{ isset($arrHours['data'][3]['time']) ? $arrHours['data'][3]['time'] : '-' }}
                                         </td>
 
-                                        <td>{{ isset($hours[$day]['balance']) ? $hours[$day]['balance'] : '-' }}</td>
+                                        <td>{{ isset($hours['days'][$day]['balance']) ? $hours['days'][$day]['balance'] : '-' }}</td>
                                     </tr>
                                 @empty
                                     <p>There is no register</p>

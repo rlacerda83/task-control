@@ -24,7 +24,7 @@ Class HoursControl
      * @param null $startDate
      * @param null $endDate
      */
-    public function getHoursByDate($startDate = null, $endDate = null)
+    public function getHoursByDate($startDate = null, $endDate = null, $returnOnlyHours = false)
     {
         if ($startDate == null) {
             $startDate = Carbon::now()->firstOfMonth()->format('Y-m-d');
@@ -36,7 +36,13 @@ Class HoursControl
 
         $hours = $this->repository->getHoursByDate($startDate, $endDate);
         $groupedHours = $this->groupHoursByDate($hours);
-        return $this->calculateBalance($groupedHours);
+
+        $result = $this->calculateBalance($groupedHours);
+        if ($returnOnlyHours) {
+            return $result['totalWorkedHours'];
+        }
+
+        return $result;
     }
 
     /**
@@ -71,7 +77,10 @@ Class HoursControl
             }
         }
 
-        return $groupedHours;
+        $result['days'] = $groupedHours;
+        $result['totalWorkedHours'] = Date::convertSecondsToTime($total);
+
+        return $result;
     }
 
     protected function getFinalBalanceByDay($workingHoursInSeconds)

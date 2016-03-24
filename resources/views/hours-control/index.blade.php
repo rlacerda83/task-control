@@ -31,6 +31,10 @@
                                 <i class="glyphicon glyphicon-plus"></i> New Register
                             </a>
 
+                            <a href="{{ URL::route('hours-control.report') }}" class="btn btn-info">
+                                <i class="glyphicon glyphicon-tasks"></i> Report
+                            </a>
+
                             <div id="filter-bar"></div>
                         </div>
 

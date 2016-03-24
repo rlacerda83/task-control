@@ -6,6 +6,7 @@ use App\Helpers\Date;
 use App\Models\HoursControl;
 use App\Repository\HoursControlRepository;
 use App\Services\HoursControl as HoursControlService;
+use App\Services\Reports;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -188,7 +189,10 @@ class HoursControlController extends BaseController
             $startDate = Date::conversion($request->input('startDate'));
             $endDate = Date::conversion($request->input('endDate'));
             $service = new HoursControlService();
+            $reports = new Reports();
             $hours = $service->getHoursByDate($startDate, $endDate);
+
+            $hours['workingHours'] = $reports->getTotalWorkingHoursByDate($startDate, $endDate);
         }
 
         return view('hours-control.report', [

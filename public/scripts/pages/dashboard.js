@@ -1,6 +1,6 @@
 $(document).ready(function() {
     if ($('#graph-bar').length) {
-        plot2 = $.jqplot('graph-bar', [s1, s2, s3], {
+        plot2 = $.jqplot('graph-bar', [s2, s1, s4, s3], {
             animate: true,
             animateReplot: true,
             legend: {
@@ -13,13 +13,14 @@ $(document).ready(function() {
                 marginRight: "100",
                 rendererOptions: {
                     numberRows: '1',
-                    numberColumns: '3'
+                    numberColumns: '4'
                 },
                 seriesToggle: true
             },
             series:[
-                {label:'Worked Hours'},
-                {label:'Month Hours'},
+                {label:'Tasks Month Hours&nbsp&nbsp'},
+                {label:'Worked Hours&nbsp&nbsp'},
+                {label:'Eletronic Point Hours&nbsp&nbsp'},
                 {label:'Percentage'}
             ],
             seriesDefaults: {
@@ -74,7 +75,7 @@ $(document).ready(function() {
             },
             seriesColors:['#00749F', '#C7754C'],
             series:[
-                {label:'Hours'},
+                {label:'Hours&nbsp&nbsp'},
                 {label:'Pending Hours'}
             ],
             seriesDefaults: {
