@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Date;
 use App\Models\HoursControl;
-use App\Models\Tasks;
 use App\Repository\HoursControlRepository;
-use App\Services\TaskProcessor;
-use App\Repository\TaskRepository;
+use App\Services\HoursControl as HoursControlService;
+use App\Services\Reports;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\View\View;
 
@@ -164,7 +162,6 @@ class HoursControlController extends BaseController
         ]);
     }
 
-
     public function removeAction(Request $request, $id)
     {
         $hourControl = $this->repository->findById($id);
@@ -180,5 +177,28 @@ class HoursControlController extends BaseController
         $request->session()->flash('success', true);
 
         return redirect('hours-control');
+    }
+
+    public function reportAction(Request $request)
+    {
+        $hours = [];
+        $startDate = Carbon::now()->firstOfMonth()->format('Y-m-d');
+        $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+        if ($request->input('startDate') && $request->input('endDate')) {
+            $startDate = Date::conversion($request->input('startDate'));
+            $endDate = Date::conversion($request->input('endDate'));
+            $service = new HoursControlService();
+            $reports = new Reports();
+            $hours = $service->getHoursByDate($startDate, $endDate);
+
+            $hours['workingHours'] = $reports->getTotalWorkingHoursByDate($startDate, $endDate);
+        }
+
+        return view('hours-control.report', [
+            'hours' => $hours,
+            'startDate' => Date::conversion($startDate),
+            'endDate' => Date::conversion($endDate)
+        ]);
     }
 }

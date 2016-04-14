@@ -19,7 +19,7 @@ class HoursControlRepository extends AbstractRepository
         $this->table = HoursControl::getTableName();
     }
 
-    public function getHoursByMonth($date = null)
+    public function getHoursByDate($startDate, $endDate)
     {
         $query = DB::table($this->table)
             ->groupBy('split_date')
@@ -31,7 +31,5 @@ class HoursControlRepository extends AbstractRepository
 
         return $query->get();
     }
-
-
 
 }

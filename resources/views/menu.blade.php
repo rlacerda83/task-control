@@ -21,6 +21,13 @@
                         </a>
                     </li>
 
+                    <li @if (strpos(\Route::currentRouteAction(), 'HoursControlController') !== false) class="active" @endif>
+                        <a href="{{ URL::route('hours-control') }}">
+                            <i class="fa fa-clock-o"></i>
+                            <span>Hours Control</span>
+                        </a>
+                    </li>
+
                     <li @if (strpos(\Route::currentRouteAction(), 'Configuration@index') !== false) class="active" @endif>
                         <a href="{{ URL::route('configuration') }}">
                             <i class="fa fa-gears"></i>

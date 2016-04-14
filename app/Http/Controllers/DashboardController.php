@@ -36,7 +36,7 @@ class DashboardController extends BaseController
     {
         $reportsService = new Reports();
 
-        $date = Carbon::now()->subYear(1);
+        $date = Carbon::now()->subMonth(6);
 
         $totalsYear = $this->repository->getTotals($date);
         $graphData = $reportsService->getDataToAppointmentGraph($date);
@@ -63,6 +63,7 @@ class DashboardController extends BaseController
         return view('dashboard.index')
             ->with('hoursGraph', json_encode($graphData['hoursGraph']))
             ->with('monthGraph', json_encode($graphData['monthGraph']))
+            ->with('eletronicPointHours', json_encode($graphData['eletronicPointHours']))
             ->with('totalsYear', $totalsYear)
             ->with('percentageGraph', json_encode($graphData['percentageGraph']))
             ->with('tasksGraph', json_encode($graphData['tasksGraph']))

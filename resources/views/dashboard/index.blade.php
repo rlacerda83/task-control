@@ -8,6 +8,7 @@
         var s1 = {!! $hoursGraph !!};
         var s2 = {!! $monthGraph !!};
         var s3 = {!! $percentageGraph !!};
+        var s4 = {!! $eletronicPointHours !!};
         var ticks = {!! $labelsGraph !!};
 
         var sp1 = {!! $daysPendingHourGraph !!};
@@ -57,7 +58,7 @@
             <div class="col-md-12">
                 <div class="main-box">
                     <header class="main-box-header clearfix">
-                        <h2 class="pull-left">Hours appointment of the last year</h2>
+                        <h2 class="pull-left">Hours appointment of the last six months</h2>
                     </header>
 
                     <div class="main-box-body clearfix">

@@ -22,13 +22,27 @@ Class Reports
     public function getDataToAppointmentGraph($date)
     {
         $graphData = $this->reportsRepository->getDatatoDashboard($date);
+        $hoursService = new HoursControl();
 
         $hoursGraph = [];
         $tasksGraph = [];
         $labelsGraph = [];
         $monthHours = [];
         $percentageHours = [];
+        $eletronicPointHours = [];
         foreach ($graphData as $data) {
+            $dataBase = $data->split_date . '-01';
+            $dataBase = Carbon::createFromFormat('Y-m-d', $dataBase);
+
+            $pointHours = $hoursService->getHoursByDate(
+                $dataBase->firstOfMonth()->format('Y-m-d'),
+                $dataBase->endOfMonth()->format('Y-m-d'),
+                true
+            );
+
+            $pointHours = str_replace(':', '.', $pointHours);
+            $eletronicPointHours[] = substr($pointHours, 0, 5);
+
             $auxDate = explode('-', $data->split_date);
             $hoursInMonth = $this->getTotalHoursByMonth($auxDate[0], $auxDate[1]);
             $monthHours[] = $hoursInMonth;
@@ -39,6 +53,7 @@ Class Reports
         }
 
         return [
+            'eletronicPointHours' => $eletronicPointHours,
             'monthGraph' => $monthHours,
             'hoursGraph' => $hoursGraph,
             'tasksGraph' => $tasksGraph,
@@ -89,12 +104,38 @@ Class Reports
         return $this->transformDataToGraph($return);
     }
 
+    /**
+     * @param $year
+     * @param $month
+     * @return int
+     */
     public function getTotalHoursByMonth($year, $month)
     {
         $startDate = Carbon::create($year, $month, 01);
         $endDate = Carbon::create($year, $month, 01)->endOfMonth();
         $period = Date::getDatesFromRange($startDate, $endDate);
 
+        return $this->getWorkingHoursByPeriod($period);
+    }
+
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @return int
+     */
+    public function getTotalWorkingHoursByDate($startDate, $endDate)
+    {
+        $period = Date::getDatesFromRange($startDate, $endDate);
+
+        return $this->getWorkingHoursByPeriod($period);
+    }
+
+    /**
+     * @param $period
+     * @return int
+     */
+    protected function getWorkingHoursByPeriod($period)
+    {
         $hours = 0;
         foreach ($period as $date) {
             if (Date::isWeekend($date)) {
