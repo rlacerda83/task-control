@@ -105,7 +105,7 @@
 											</div>
 											<div class="row">
 												<div class="col-xs-12">
-													<p class="social-text">&copy; CarWash 1.0 - Todos os direitos reservados</p>
+													<p class="social-text">&copy; Mobly Manager - Todos os direitos reservados</p>
 												</div>
 											</div>
 										</form>

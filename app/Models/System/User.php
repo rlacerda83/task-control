@@ -9,8 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    const STATUS_ACTIVE = 'ativo';
-    const STATUS_INACTIVE = 'inativo';
+    const STATUS_ACTIVE = 'active';
+    const STATUS_INACTIVE = 'inactive';
 
     protected $table = 'system_user';
 

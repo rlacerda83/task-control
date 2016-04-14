@@ -10,6 +10,6 @@ class HoursControl extends BaseModel
 
     protected $table = 'hours_control';
 
-    protected $fillable = ['day', 'time'];
+    protected $fillable = ['day', 'user_id', 'time'];
 
 }

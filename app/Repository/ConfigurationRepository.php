@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Helpers\UserLogged;
 use App\Models\Configuration;
+use App\Models\System\User;
 use DB;
 
 class ConfigurationRepository extends AbstractRepository
@@ -14,8 +16,14 @@ class ConfigurationRepository extends AbstractRepository
 
     protected $table;
 
+    /**
+     * @var User
+     */
+    protected $user;
+
     public function __construct()
     {
+        $this->user = UserLogged::get();
         $this->table = Configuration::getTableName();
     }
 
@@ -24,7 +32,9 @@ class ConfigurationRepository extends AbstractRepository
      */
     public function findFirst()
     {
-        return DB::table($this->table)->orderBy('id')->first();
+        return DB::table($this->table)
+            ->where('user_id', $this->user->id)
+            ->orderBy('id')->first();
     }
 
     public function getValue($value)

@@ -11,7 +11,7 @@ class Tasks extends BaseModel
     const STATUS_ERROR = 'error';
     const STATUS_PROCESSED = 'processed';
 
-    protected $fillable = ['task', 'time', 'date', 'description', 'status', 'error_message'];
+    protected $fillable = ['user_id', 'task', 'time', 'date', 'description', 'status', 'error_message'];
 
     public static function boot()
     {

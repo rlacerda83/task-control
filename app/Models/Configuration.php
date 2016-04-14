@@ -13,6 +13,6 @@ class Configuration extends BaseModel
 
     protected $table = 'configuration';
 
-    protected $fillable = ['email', 'name', 'password', 'send_email_process', 'url_form', 'enable_queue_process'];
+    protected $fillable = ['email', 'user_id', 'name', 'password', 'send_email_process', 'url_form', 'enable_queue_process'];
 
 }
