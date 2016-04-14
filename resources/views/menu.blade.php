@@ -27,6 +27,31 @@
                             <span>Configurations</span>
                         </a>
                     </li>
+
+                    @if (\App\Helpers\Permission::check('system'))
+                        <br>
+                        <li class="nav-header nav-header-first hidden-sm hidden-xs">
+                            <p>Sistema</p>
+                        </li>
+
+                        @if (\App\Helpers\Permission::check('system.profile.list'))
+                            <li @if (\App\Helpers\Menu::isActive('system.profile')) class="active" @endif>
+                                <a href="{{ URL::route('system.profile.list') }}" class="" title="Perfis">
+                                    <i class="fa fa-database"></i>
+                                    <span>Perfis</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if (\App\Helpers\Permission::check('system.user.list'))
+                            <li @if (\App\Helpers\Menu::isActive('system.user')) class="active" @endif>
+                                <a href="{{ URL::route('system.user.list') }}" class="" title="Usuários">
+                                    <i class="fa fa-sitemap"></i>
+                                    <span>Usuários</span>
+                                </a>
+                            </li>
+                        @endif
+                    @endif
                 </ul>
             </div>
         </div>

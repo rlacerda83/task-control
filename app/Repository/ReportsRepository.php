@@ -2,19 +2,18 @@
 
 namespace App\Repository;
 
-use App\Helpers\Filter;
 use App\Models\Tasks;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use DB;
 
-class ReportsRepository
+class ReportsRepository extends AbstractRepository
 {
-    const TABLE = 'tasks';
+    protected $table;
 
-    public static $months = [
-
-    ];
+    public function __construct()
+    {
+        $this->table = Tasks::getTableName();
+    }
 
     /**
      * @param Carbon|null $date
@@ -22,7 +21,7 @@ class ReportsRepository
      */
     public function getDatatoDashboard($date = null)
     {
-        $query = DB::table(self::TABLE)
+        $query = DB::table($this->table)
             ->select(
                 DB::raw('count(id) as tasks'),
                 DB::raw('SUM(time) AS hours'),
@@ -43,7 +42,7 @@ class ReportsRepository
      */
     public function getLastTasks()
     {
-        return DB::table(self::TABLE)->orderBy('id', 'DESC')->limit(10)->get();
+        return DB::table($this->table)->orderBy('id', 'DESC')->limit(10)->get();
     }
 
     /**
@@ -52,7 +51,7 @@ class ReportsRepository
      */
     public function getTotals($date = null)
     {
-        $query = DB::table(self::TABLE)
+        $query = DB::table($this->table)
             ->select(
                 DB::raw('count(id) as total'),
                 DB::raw('SUM(IF(STATUS = \'pending\', 1, 0)) AS totalPending'),
@@ -73,7 +72,7 @@ class ReportsRepository
      */
     public function getDaysWithoutFullHours($date = null)
     {
-        $query = DB::table(self::TABLE)
+        $query = DB::table($this->table)
             ->select(
                 DB::raw('SUM(time) AS hours'),
                 DB::raw('8 - SUM(TIME) AS hoursPending'),

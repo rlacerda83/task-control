@@ -47,4 +47,68 @@ Route::group(['middleware' => ['web']], function () {
     //config
     Route::post('/configuration/save', ['as' => 'configuration.save', 'uses' => 'ConfigurationController@saveAction']);
     Route::get('/configuration', ['as' => 'configuration', 'uses' => 'ConfigurationController@showAction']);
+
+    Route::group(['namespace' => 'System'], function() {
+        //users
+        Route::get(
+            '/system/users',
+            ['as' => 'system.user.list', 'uses' => 'UserController@indexAction']
+        );
+        Route::post(
+            '/system/users/load',
+            ['as' => 'system.user.load', 'uses' => 'UserController@indexAction']
+        );
+        Route::get(
+            '/system/users/new',
+            ['as' => 'system.user.new', 'uses' => 'UserController@newAction']
+        );
+        Route::get(
+            '/system/users/edit/{id}',
+            ['as' => 'system.user.edit', 'uses' => 'UserController@editAction']
+        );
+        Route::post(
+            '/system/users/save',
+            ['as' => 'system.user.save', 'uses' => 'UserController@saveAction']
+        );
+        Route::get(
+            '/system/users/remove/{id}',
+            ['as' => 'system.user.remove', 'uses' => 'UserController@removeAction']
+        );
+
+        //profile
+        Route::get(
+            '/system/profiles',
+            ['as' => 'system.profile.list', 'uses' => 'ProfileController@indexAction']
+        );
+
+        Route::post(
+            '/system/profiles/load',
+            ['as' => 'system.profile.load', 'uses' => 'ProfileController@indexAction']
+        );
+
+        Route::get(
+            '/system/profiles/new',
+            ['as' => 'system.profile.new', 'uses' => 'ProfileController@newAction']
+        );
+
+        Route::get(
+            '/system/profiles/edit/{id}',
+            ['as' => 'system.profile.edit', 'uses' => 'ProfileController@editAction']
+        );
+
+        Route::post(
+            '/system/profiles/save',
+            ['as' => 'system.profile.save', 'uses' => 'ProfileController@saveAction']
+        );
+
+        Route::post(
+            '/system/profiles/save-permission',
+            ['as' => 'system.profile.save.permission', 'uses' => 'ProfileController@savePermissionAction']
+        );
+
+        Route::get(
+            '/system/profiles/remove/{id}',
+            ['as' => 'system.profile.remove', 'uses' => 'ProfileController@removeAction']
+        );
+    });
 });

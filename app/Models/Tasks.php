@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Models\Observers\TaskObserver;
-use Illuminate\Database\Eloquent\Model;
 
-class Tasks extends Model
+class Tasks extends BaseModel
 {
 
     const STATUS_PENDING = 'pending';

@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class HoursControl extends Model
+class HoursControl extends BaseModel
 {
 
     protected $table = 'hours_control';
