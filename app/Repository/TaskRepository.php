@@ -39,6 +39,18 @@ class TaskRepository extends AbstractRepository
     }
 
     /**
+     * @param $id
+     * @return mixed
+     */
+    public function findById($id)
+    {
+        return DB::table($this->table)
+            ->where('user_id', $this->user->id)
+            ->where('id', $id)
+            ->first();
+    }
+
+    /**
      * @param Request $request
      * @param int $itemsPage
      * @return mixed

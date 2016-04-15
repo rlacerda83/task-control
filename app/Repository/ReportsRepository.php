@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Helpers\UserLogged;
 use App\Models\Tasks;
 use Carbon\Carbon;
 use DB;
@@ -10,8 +11,14 @@ class ReportsRepository extends AbstractRepository
 {
     protected $table;
 
+    /**
+     * @var User
+     */
+    protected $user;
+
     public function __construct()
     {
+        $this->user = UserLogged::get();
         $this->table = Tasks::getTableName();
     }
 
@@ -27,6 +34,7 @@ class ReportsRepository extends AbstractRepository
                 DB::raw('SUM(time) AS hours'),
                 DB::raw('LEFT(date, 7) AS split_date')
             )
+            ->where('user_id', $this->user->id)
             ->groupBy('split_date')
             ->orderBy('date', 'ASC');
 
@@ -42,7 +50,10 @@ class ReportsRepository extends AbstractRepository
      */
     public function getLastTasks()
     {
-        return DB::table($this->table)->orderBy('id', 'DESC')->limit(10)->get();
+        return DB::table($this->table)
+            ->where('user_id', $this->user->id)
+            ->orderBy('id', 'DESC')
+            ->limit(10)->get();
     }
 
     /**
@@ -57,7 +68,8 @@ class ReportsRepository extends AbstractRepository
                 DB::raw('SUM(IF(STATUS = \'pending\', 1, 0)) AS totalPending'),
                 DB::raw('SUM(IF(STATUS = \'processed\', 1, 0)) AS totalProcessed'),
                 DB::raw('SUM(IF(STATUS = \'error\', 1, 0)) AS totalError')
-            );
+            )
+            ->where('user_id', $this->user->id);
 
         if ($date) {
             $query->where('date', '>=', $date->format('Y-m-d'));
@@ -77,7 +89,9 @@ class ReportsRepository extends AbstractRepository
                 DB::raw('SUM(time) AS hours'),
                 DB::raw('8 - SUM(TIME) AS hoursPending'),
                 'date'
-            )->groupBy('date');
+            )
+            ->where('user_id', $this->user->id)
+            ->groupBy('date');
             
         if ($date) {
             $query->where('date', '>=', $date->format('Y-m-d'));
