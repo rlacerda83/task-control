@@ -1,0 +1,9 @@
+deploy:
+  provider: openshift
+  user: r.lacerda83@gmail.com
+  password:
+    secure: XPcKxkYPiCO2hOzR1DJr7MWaE+U7Q0v2XjPZXhKZSSxDI57/jpy1PZRbnb77Z4mGiHSRaKzNPBdBoQK9o1GTU6+tdwIT3kvtLII/MuJnA74j/jGKjGeER9uzZ8KP4AWjEPuCa38tkK0DUbZt5vpV8mMMn+p5vnG0kyPtBgr7fwtXcnf9fLnkUJ9EufTS/JU263G6PAsiIcTbFcLHGWXBAzoqHVHK1xsHw4XCSdFUxUZ+iP04+/FCBk/Qg8iLh3/pRQTk/yrbVS6pyGsOlLRlI/fnSlm8MT64Rjn1iceeWbh0xyeeAZvSVNZlFFgHR/hfZyGM7riNgrwS3RmCrnBM5hitTgvo6q1oesA4i3+fWKzn6IqC63NBUD1SXaPMU+fwILGy3nrnkE7lxqXovCOkPDf3/SeQl+wHR2OPdoUcts49wHSEVgMf0beFiDFHMy/oruZ9uqdeI49+NXQCjuC/dwS2EKa47i7UoB/1J2gVHaeprfnUVmvO5j7izQcifKimWstKC2UXHbslLqZxwrTdd+YHzJJjpvVWEqxqSCx8gKVMw86sssRNj9Ca2VJqEJh9ClfgBJLR/aGemRaa5d6BaCrk0oKDcCJLgcoVepGTaBlFswNW4NypBrDpcb2JjpekI1/50X/A1jO8zdHsYwF5jyZ9+NbZD9hqGpUdVok7c2c=
+  app: moblymanager
+  domain: rlacerda83
+  on:
+    repo: rlacerda83/task-control
