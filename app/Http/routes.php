@@ -25,9 +25,12 @@
 
 Route::group(['middleware' => ['web']], function () {
 
+    Route::auth();
+
     Route::get('/login', ['as' => 'login', 'uses' => 'LoginController@loginAction']);
     Route::post('/login', ['as' => 'login.process', 'uses' => 'LoginController@AuthenticateAction']);
     Route::get('/logout', ['as' => 'logout', 'uses' => 'LoginController@LogoutAction']);
+
     Route::get(
         '/login/recover-password',
         ['as' => 'recover.password', 'uses' => 'LoginController@RecoverPasswordAction']

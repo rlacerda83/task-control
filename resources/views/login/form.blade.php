@@ -90,13 +90,13 @@
 												)) }}
 											</div>
 
-											{{--<div id="remember-me-wrapper">--}}
-												{{--<div class="row">--}}
-													{{--<a href="{{ URL::route('recover.password') }}" id="login-forget-link" class="col-xs-6">--}}
-														{{--Esqueceu a senha?--}}
-													{{--</a>--}}
-												{{--</div>--}}
-											{{--</div>--}}
+											<div id="remember-me-wrapper">
+												<div class="row">
+													<a href="{{ url('/password/reset') }}" class="col-xs-6">
+														Esqueceu a senha?
+													</a>
+												</div>
+											</div>
 
 											<div class="row">
 												<div class="col-xs-12">

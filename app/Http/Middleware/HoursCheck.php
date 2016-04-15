@@ -18,7 +18,7 @@ class HoursCheck
     {
         if (!isset($_COOKIE['hoursCheck'])) {
             setcookie('hoursCheck', true, time() + (3600 * 6));
-            Artisan::call('tasks:pending');
+            //Artisan::call('tasks:pending');
         }
 
         return $next($request);
