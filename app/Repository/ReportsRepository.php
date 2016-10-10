@@ -2,25 +2,19 @@
 
 namespace App\Repository;
 
-use App\Helpers\UserLogged;
+use App\Helpers\Filter;
 use App\Models\Tasks;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use DB;
 
-class ReportsRepository extends AbstractRepository
+class ReportsRepository
 {
-    protected $table;
+    const TABLE = 'tasks';
 
-    /**
-     * @var User
-     */
-    protected $user;
+    public static $months = [
 
-    public function __construct()
-    {
-        $this->user = UserLogged::get();
-        $this->table = Tasks::getTableName();
-    }
+    ];
 
     /**
      * @param Carbon|null $date
@@ -28,13 +22,12 @@ class ReportsRepository extends AbstractRepository
      */
     public function getDatatoDashboard($date = null)
     {
-        $query = DB::table($this->table)
+        $query = DB::table(self::TABLE)
             ->select(
                 DB::raw('count(id) as tasks'),
                 DB::raw('SUM(time) AS hours'),
                 DB::raw('LEFT(date, 7) AS split_date')
             )
-            ->where('user_id', $this->user->id)
             ->groupBy('split_date')
             ->orderBy('date', 'ASC');
 
@@ -50,10 +43,7 @@ class ReportsRepository extends AbstractRepository
      */
     public function getLastTasks()
     {
-        return DB::table($this->table)
-            ->where('user_id', $this->user->id)
-            ->orderBy('id', 'DESC')
-            ->limit(10)->get();
+        return DB::table(self::TABLE)->orderBy('id', 'DESC')->limit(10)->get();
     }
 
     /**
@@ -62,14 +52,13 @@ class ReportsRepository extends AbstractRepository
      */
     public function getTotals($date = null)
     {
-        $query = DB::table($this->table)
+        $query = DB::table(self::TABLE)
             ->select(
                 DB::raw('count(id) as total'),
                 DB::raw('SUM(IF(STATUS = \'pending\', 1, 0)) AS totalPending'),
                 DB::raw('SUM(IF(STATUS = \'processed\', 1, 0)) AS totalProcessed'),
                 DB::raw('SUM(IF(STATUS = \'error\', 1, 0)) AS totalError')
-            )
-            ->where('user_id', $this->user->id);
+            );
 
         if ($date) {
             $query->where('date', '>=', $date->format('Y-m-d'));
@@ -84,14 +73,12 @@ class ReportsRepository extends AbstractRepository
      */
     public function getDaysWithoutFullHours($date = null)
     {
-        $query = DB::table($this->table)
+        $query = DB::table(self::TABLE)
             ->select(
                 DB::raw('SUM(time) AS hours'),
                 DB::raw('8 - SUM(TIME) AS hoursPending'),
                 'date'
-            )
-            ->where('user_id', $this->user->id)
-            ->groupBy('date');
+            )->groupBy('date');
             
         if ($date) {
             $query->where('date', '>=', $date->format('Y-m-d'));

@@ -2,29 +2,61 @@
 
 namespace App\Repository;
 
-use App\Helpers\UserLogged;
-use App\Models\Configuration;
-use App\Models\System\User;
+use App\Helpers\Filter;
+use Illuminate\Http\Request;
+use Validator;
 use DB;
 
-class ConfigurationRepository extends AbstractRepository
+class ConfigurationRepository
 {
-    protected $rules = [
+    const TABLE = 'configuration';
+
+    public static $rules = [
         'email' => 'required|email',
         'url_form' => 'required|url',
     ];
 
-    protected $table;
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function validateRequest(Request $request, $returnJson = true)
+    {
+        $rules = self::$rules;
+
+        $params = $request->all();
+        $validator = Validator::make($params, $rules);
+        if ($validator->fails()) {
+
+            if ($returnJson) {
+                return $this->convertErrorsToJson($validator);
+            }
+
+            return $validator->errors()->all();
+        }
+
+        return true;
+    }
+
+    protected function convertErrorsToJson($validator)
+    {
+        $errors = [];
+        foreach (self::$rules as $field => $value) {
+            foreach ($validator->messages()->get($field) as $message) {
+                $errors[$field] = $message;
+            }
+        }
+
+        return json_encode($errors);
+    }
 
     /**
-     * @var User
+     * @param $id
+     * @return mixed
      */
-    protected $user;
-
-    public function __construct()
+    public function findById($id)
     {
-        $this->user = UserLogged::get();
-        $this->table = Configuration::getTableName();
+        return DB::table(self::TABLE)->where('id', $id)->first();
     }
 
     /**
@@ -32,9 +64,7 @@ class ConfigurationRepository extends AbstractRepository
      */
     public function findFirst()
     {
-        return DB::table($this->table)
-            ->where('user_id', $this->user->id)
-            ->orderBy('id')->first();
+        return DB::table(self::TABLE)->orderBy('id')->first();
     }
 
     public function getValue($value)
@@ -43,4 +73,14 @@ class ConfigurationRepository extends AbstractRepository
         return isset($configuration->$value) ? $configuration->$value : null;
     }
 
+    /**
+     * @param array $data
+     * @param $id
+     * @param string $attribute
+     * @return mixed
+     */
+    public function update(array $data, $id, $attribute="id")
+    {
+        return DB::table(self::TABLE)->where($attribute, '=', $id)->update($data);
+    }
 }

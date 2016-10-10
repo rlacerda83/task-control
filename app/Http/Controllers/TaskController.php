@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Date;
-use App\Helpers\UserLogged;
 use App\Models\Tasks;
 use App\Services\TaskProcessor;
 use App\Repository\TaskRepository;
@@ -88,7 +87,6 @@ class TaskController extends BaseController
     {
         $params = $request->all();
         $params['date'] = Date::conversion($params['date']);
-        $params['user_id'] = UserLogged::getId();
 
         $request->replace($params);
 
