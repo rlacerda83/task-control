@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\System\User::class,
+            'model' => App\User::class,
         ],
 
         // 'users' => [
@@ -100,7 +100,7 @@ return [
             'provider' => 'users',
             'email' => 'auth.emails.password',
             'table' => 'password_resets',
-            'expire' => 600,
+            'expire' => 60,
         ],
     ],
 

@@ -181,12 +181,11 @@ Class TaskProcessor
 
         $urlGet = $task->link ? $task->link : $this->configuration->url_form;
         $urlPost = str_replace('viewform', 'formResponse', $urlGet);
-        $time = str_replace('.', ',', $task->time);
 
         $data = [
             'entry.116160053' => $task->task,
             'entry.789822953' => $task->date,
-            'entry.368040154' => $time,
+            'entry.368040154' => $task->time,
             'entry_1252005894' => $task->description,
             'emailReceipt' => $this->configuration->send_email_process ? 'true' : ''
         ];

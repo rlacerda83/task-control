@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class Configuration extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class Configuration extends Model
 {
     const URL_FORM = 'https://docs.google.com/a/mobly.com.br/forms/d/11CFIHRL33Pw-vMLbPubP5NUZe_eGhI-equ-EhB9HjIg/viewform';
 
@@ -13,6 +15,6 @@ class Configuration extends BaseModel
 
     protected $table = 'configuration';
 
-    protected $fillable = ['email', 'user_id', 'name', 'password', 'send_email_process', 'url_form', 'enable_queue_process'];
+    protected $fillable = ['email', 'name', 'password', 'send_email_process', 'url_form', 'enable_queue_process'];
 
 }

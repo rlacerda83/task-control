@@ -15,9 +15,6 @@ class VerifyCsrfToken extends BaseVerifier
         'tasks/load',
         'tasks/process',
         '/tasks/save',
-        '/hours-control/load',
-        'system/users/load',
-        'system/profiles/load',
-        'system/profiles/save-permission',
+        '/hours-control/load'
     ];
 }

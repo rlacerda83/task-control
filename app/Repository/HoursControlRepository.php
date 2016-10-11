@@ -3,41 +3,52 @@
 namespace App\Repository;
 
 use App\Helpers\Filter;
-use App\Helpers\UserLogged;
-use App\Models\HoursControl;
-use App\Models\System\User;
-use DB;
+use App\Models\Tasks;
 use Illuminate\Http\Request;
+use Validator;
+use DB;
 
-class HoursControlRepository extends AbstractRepository
+class HoursControlRepository
 {
-    protected $rules = [
+    const TABLE = 'hours_control';
+
+    public static $rules = [
         'time' => 'required',
         'day' => 'required|date'
     ];
 
     /**
-     * @var User
+     * @param Request $request
+     * @return bool
      */
-    protected $user;
-
-    protected $table;
-
-    public function __construct()
+    public function validateRequest(Request $request, $returnJson = true)
     {
-        $this->user = UserLogged::get();
-        $this->table = HoursControl::getTableName();
+        $rules = self::$rules;
+
+        $params = $request->all();
+        $validator = Validator::make($params, $rules);
+        if ($validator->fails()) {
+
+            if ($returnJson) {
+                return $this->convertErrorsToJson($validator);
+            }
+
+            return $validator->errors()->all();
+        }
+
+        return true;
     }
 
-    public function getHoursByDate($startDate, $endDate)
+    protected function convertErrorsToJson($validator)
     {
-        $query = DB::table($this->table)
-            ->where('user_id', $this->user->id)
-            ->whereBetween('day', array($startDate, $endDate))
-            ->orderBy('day', 'ASC')
-            ->orderBy('time', 'ASC');
+        $errors = [];
+        foreach (self::$rules as $field => $value) {
+            foreach ($validator->messages()->get($field) as $message) {
+                $errors[$field] = $message;
+            }
+        }
 
-        return $query->get();
+        return json_encode($errors);
     }
 
     /**
@@ -46,10 +57,18 @@ class HoursControlRepository extends AbstractRepository
      */
     public function findById($id)
     {
-        return DB::table($this->table)
-            ->where('user_id', $this->user->id)
-            ->where('id', $id)
-            ->first();
+        return DB::table(self::TABLE)->where('id', $id)->first();
+    }
+
+    /**
+     * @param array $data
+     * @param $id
+     * @param string $attribute
+     * @return mixed
+     */
+    public function update(array $data, $id, $attribute="id")
+    {
+        return DB::table(self::TABLE)->where($attribute, '=', $id)->update($data);
     }
 
     /**
@@ -59,14 +78,23 @@ class HoursControlRepository extends AbstractRepository
      */
     public function getAllPaginate(Request $request, $itemsPage = 30)
     {
-        $query = DB::table($this->table);
-        $query = Filter::parse($request, $query, $this->table);
-        $query->where('user_id', $this->user->id);
+        $query = DB::table(self::TABLE);
+        $query = Filter::parse($request, $query);
         $query->orderBy($request->get('sort'), $request->get('order', 'ASC'));
 
         $paginator = $query->paginate($itemsPage);
         $paginator->appends(app('request')->except('page'));
         return $paginator;
+    }
+
+    public function getHoursByDate($startDate, $endDate)
+    {
+        $query = DB::table(self::TABLE)
+            ->whereBetween('day', array($startDate, $endDate))
+            ->orderBy('day', 'ASC')
+            ->orderBy('time', 'ASC');
+
+        return $query->get();
     }
 
 }

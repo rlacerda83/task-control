@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Date;
-use App\Helpers\UserLogged;
 use App\Models\HoursControl;
 use App\Repository\HoursControlRepository;
 use App\Services\HoursControl as HoursControlService;
@@ -85,7 +84,6 @@ class HoursControlController extends BaseController
     {
         $params = $request->all();
         $params['day'] = Date::conversion($params['day']);
-        $params['user_id'] = UserLogged::getId();
 
         $request->replace($params);
 

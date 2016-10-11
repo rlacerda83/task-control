@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
-class HoursControl extends BaseModel
+use Illuminate\Database\Eloquent\Model;
+
+class HoursControl extends Model
 {
 
     const WORKING_HOURS = 8;
@@ -10,6 +12,6 @@ class HoursControl extends BaseModel
 
     protected $table = 'hours_control';
 
-    protected $fillable = ['day', 'user_id', 'time'];
+    protected $fillable = ['day', 'time'];
 
 }

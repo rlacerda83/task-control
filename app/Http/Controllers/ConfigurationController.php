@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\UserLogged;
 use App\Models\Configuration;
 use App\Repository\ConfigurationRepository;
 use Illuminate\Http\Request;
@@ -36,7 +35,6 @@ class ConfigurationController extends BaseController
         if (!$configuration) {
             $data = ['send_email_process' => '1'];
             $data['url_form'] = Configuration::URL_FORM;
-            $data['user_id'] = UserLogged::getId();
             $configuration = Configuration::firstOrCreate($data);
         }
 
