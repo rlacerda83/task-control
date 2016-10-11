@@ -1,3 +1,5 @@
+# DEPRECATED
+
 # Mobly - Tasks Manager
 
 ## Description
